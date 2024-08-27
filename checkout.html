@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="css/main.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre&display=swap" rel="stylesheet">
+  <script defer src="js/main.js"></script>
+</head>
+
+<body>
+  <nav class="navigation">
+    <div class="wrapper container">
+      <div class="breakout">
+        <div class="logo-container"><img src="assets/images/logo.png" alt=""></div>
+        <div class="nav-misc" data-navigation-status="closed" id="nav-misc">
+          <button id="close-navigation" onclick="toggleNav()">
+            <div class="cross"></div>
+          </button>
+          <ul class="nav-items">
+            <li><a class="nav-link" href="/">Home</a></li>
+
+            <li><a class="nav-link" href="/products.html">Senators</a></li>
+            <li><a class="nav-link hide" href="/checkout.html">Orders</a></li>
+            <li><a class="nav-link hide" href="/cart.html">Cart</a></li>
+            <li><a class="nav-link" href="/contact.html">Contact</a></li>
+          </ul>
+          <div class="actions">
+            <a href="./cart.html" class="icon"><img src="assets/icons/save.svg" alt=""></a>
+            <a href="./checkout.html" class="icon" data-counter="10"><img src="assets/icons/envelope.svg" alt=""></a href="">
+          </div>
+        </div>
+        <button id="open-navigation" onclick="toggleNav()">
+          <div class="bar"></div>
+        </button>
+
+      </div>
+
+    </div>
+  </nav>
+  <main class="container checkout">
+    <div class="wrapper">
+      <!-- submit clients address details if he chooses to order by delivery -->
+      <form action="" class="billing-address" id="order-form">
+        <div class="form-group">
+          <label for="information">Customer Information</label>
+          <input type="text" name="email" id="">
+        </div>
+        <div class="form-group">
+          <input type="text" name="deliveryType" id="deliveryTypeInput" hidden>
+        </div>
+        <div class="delivery-method">
+          <div class="delivery-type active" data-delivery-type="deliver">
+            <img class="delivery-tick" src="assets/icons/tick.svg" alt="">
+            <p class="delivery-heading">Home Delivery</p>
+            <p class="delivery-details">Delivery within 2 - 5 business days</p>
+          </div>
+          <div class="delivery-type" data-delivery-type="pickup">
+            <img class="delivery-tick" src="assets/icons/tick.svg" alt="">
+            <p class="delivery-heading">In-store Pickup</p>
+            <p class="delivery-details">Pickup at our store at 123 Close Eliozu, Port Harcourt, Nigeria.</p>
+          </div>
+        </div>
+      </form>
+      <div class="order--section">
+        <div class="order--summary-container">
+
+          <div class="order--item">
+            <div class="order--item-image-container">
+              <img src="assets/images/img-8337-6680861cdabff.webp" alt="">
+            </div>
+            <div class="order--item-details">
+              <p class="order--item-name">Styled Senator</p>
+              <p class="order--item-quantity">2</p>
+              <p class="order--item-size">m</p>
+            </div>
+            <p class="order--item-price">$50</p>
+          </div>
+          <div class="order--item">
+            <div class="order--item-image-container">
+              <img src="assets/images/img-8336-6680861d35809.webp" alt="">
+            </div>
+            <div class="order--item-details">
+              <p class="order--item-name">Brown Butterfly Senator</p>
+              <p class="order--item-quantity">1</p>
+              <p class="order--item-size">l</p>
+            </div>
+            <p class="order--item-price">$50</p>
+          </div>
+        </div>
+        <div class="order--cart-summary">
+          <div class="details">
+            <div>
+              <p><b>Total</b></p>
+              <p>$20</p>
+            </div>
+
+          </div>
+        </div>
+        <button onclick="submitBillingDetailsForm()">Complete Order</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="full-width">
+    <div class="footer-wrapper">
+      <div class="logo"><img src="assets/images/logo.png" alt=""></div>
+      <ul class="quick-links">
+        <li><a href="">Home</a></li>
+        <li><a href="">Brands</a></li>
+        <li><a href="">Collection</a></li>
+        <li><a href="">About Us</a></li>
+      </ul>
+      <ul class="quick-links">
+        <li>Contact Us</li>
+        <li><a href="tel:">4949494949</a></li>
+        <li><a href="mailto:">something@gmail.com</a></li>
+        <li><a href="https://">website.com</a></li>
+      </ul>
+      <div class="socials">
+        <p>All Rights Reserved 2024</p>
+        <ul>
+          <li class="icons"><a href=""><img src="assets/icons/tiktok.svg" loading="lazy" alt=""></a></li>
+          <li class="icons"><a href=""><img src="assets/icons/instagram.svg" loading="lazy" alt=""></a></li>
+          <li class="icons"><a href=""><img src="assets/icons/twitter.svg" loading="lazy" alt=""></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

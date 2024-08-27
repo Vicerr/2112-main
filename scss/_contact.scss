@@ -1,0 +1,81 @@
+.container:has(.contact) {
+    header {
+        background: url(../assets/images/220304-iphone-call-unsplash-750x375-6692ffb28f1d7.webp) no-repeat center;
+        background-size: cover;
+        position: relative;
+        margin-bottom: 30px;
+        min-height: 45vh;
+        max-height: 500px;
+        background-color: #777;
+
+        span {
+            position: absolute;
+            color: white;
+            bottom: 10px;
+            font-size: var(--fs-h1);
+        }
+    }
+}
+
+.contact {
+    h2 {
+        margin-bottom: .5rem;
+    }
+
+    p {
+        margin-bottom: .5em;
+    }
+
+    &form {
+        width: 100%;
+        display: grid;
+        gap: 1rem;
+
+        .form-group {
+            display: grid;
+
+            label {
+                font-size: var(--fs-p);
+            }
+
+            input,
+            textarea {
+                width: 100%;
+                padding: 1em;
+                border: 1px solid #bdbdbdcc;
+                border-radius: 4px;
+            }
+        }
+
+    }
+
+    button {
+        cursor: pointer;
+        padding: 1em;
+        border-radius: 4px;
+        color: white;
+        background-color: var(--blue);
+        width: fit-content;
+        border: 0;
+        font-size: var(--fs-p);
+    }
+
+    .form-group-wide {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+
+        .form-group {
+
+            width: 100%;
+
+            @media screen and (min-width: 768px) {
+                flex: 1;
+            }
+        }
+    }
+
+
+
+}

@@ -1,0 +1,60 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+    width: min(80vw, 350px);
+    border: 0;
+    outline: 0;
+    border-radius: 4px;
+    padding-top: 2rem;
+
+    button {
+        width: 100%;
+        padding: 1em;
+        background-color: var(--blue);
+        color: white;
+        cursor: pointer;
+        border: 0;
+        border-radius: 4px;
+    }
+
+    form {
+        margin-bottom: 10px;
+    }
+
+    &::backdrop {
+        background-color: #000000b4;
+    }
+
+    p {
+        font-size: 14px;
+        text-align: center;
+
+    }
+}
+
+.star-rating-send {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    span {
+        display: inline-block;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color .1s ease-in-out;
+
+        &:hover,
+        &[data-clicked="true"] {
+            color: orange;
+        }
+
+        &:hover~span,
+        &[data-clicked="true"]~span {
+            color: orange;
+        }
+    }
+}
