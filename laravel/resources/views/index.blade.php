@@ -5,7 +5,7 @@
       <p class="hero--title">Discover and Elevate Your own <span>Style</span></p>
       <p class="hero--description text-secondary">Where creativity meets coutute. Explore our exclusive designs, crafted with passion and precision to bring your fashion dreams to life.</p>
 
-      <a href="./products.html" class="cta">Shop now</a>
+      <a href="{{ route('products') }}" class="cta">Shop now</a>
     </div>
   </div>
   <div class="swiper-section" id="swiper">
@@ -90,7 +90,7 @@
 
     </div>
     <div class="cta-container">
-      <a href="./products.html" class="cta">Shop now</a>
+      <a href="{{ route('products') }}" class="cta">Shop now</a>
     </div>
   </section>
   <section class="review full-width">
@@ -200,7 +200,7 @@
 
     </div>
     <div class="cta-container">
-      <a href="./products.html" class="cta">Shop now</a>
+      <a href="{{ route('products') }}" class="cta">Shop now</a>
     </div>
   </section>
 </x-layout>

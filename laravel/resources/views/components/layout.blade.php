@@ -29,10 +29,10 @@
           <ul class="nav-items">
             <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
 
-            <li><a class="nav-link" href="/products.html">Collections</a></li>
+            <li><a class="nav-link" href="{{ route('products') }}">Collections</a></li>
             <li><a class="nav-link hide" href="/checkout.html">Orders</a></li>
             <li><a class="nav-link hide" href="/cart.html">Cart</a></li>
-            <li><a class="nav-link" href="/contact.html">Contact</a></li>
+            <li><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
           </ul>
           <div class="actions">
             <a href="./cart.html" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt=""></a>
@@ -55,10 +55,10 @@
     <div class="footer-wrapper">
       <div class="logo"><img src="{{asset('images/logo.png')}}" alt=""></div>
       <ul class="quick-links">
-        <li><a href="">Home</a></li>
+        <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="">Brands</a></li>
-        <li><a href="">Collection</a></li>
-        <li><a href="">About Us</a></li>
+        <li><a href="{{ route('products') }}">Collection</a></li>
+        <li><a href="{{ route('contact') }}">About Us</a></li>
       </ul>
       <ul class="quick-links">
         <li>Contact Us</li>
