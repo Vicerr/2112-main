@@ -18,4 +18,12 @@ Route::view('/checkout', 'checkout')->name('checkout');
 
 Route::view('/product', 'product')->name('product');
 
+Route::view('/dashboard', 'dashboard')->name('dashboard');
+
+Route::view('/users', 'users')->name('users');
+
+Route::view('/create', 'create')->name('create');
+
+Route::view('/items', 'items')->name('items');
+
 
