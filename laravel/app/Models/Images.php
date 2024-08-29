@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Images extends Model
 {
+    public $table = 'images';
     use HasFactory;
     public function products() {
         return $this->belongsTo(products::class);
