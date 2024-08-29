@@ -274,3 +274,27 @@ let itemColor = document.querySelector(".item-color")
 if (itemColor) {
     itemColor.style.backgroundColor = itemColor.dataset.color
 }
+
+
+// FLASH MESSAGE FUNCTIONALITY
+
+$(document).ready(function () {
+    function showFlashMessage() {
+        $('#flash-message').addClass('show');
+        setTimeout(function() {
+            hideFlashMessage();
+        }, 3000);
+    }
+
+    // Hide flash message
+    function hideFlashMessage() {
+        $('#flash-message').removeClass('show')
+    }
+    showFlashMessage();
+
+    // Handle cancel button
+    $('#closebtn').on('click', function() {
+        hideFlashMessage();
+    });
+
+});
