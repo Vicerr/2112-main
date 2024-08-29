@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('desc');
             $table->string('color');
             $table->unsignedBigInteger('price');
-            $table->string('email')->unique();
             $table->string('tag');
             $table->timestamp('created_at');
         });
