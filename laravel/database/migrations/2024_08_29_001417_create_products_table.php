@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('color');
             $table->unsignedBigInteger('price');
             $table->string('tag');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 
