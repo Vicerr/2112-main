@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 Route::view('/', 'index')->name('home');
 
@@ -8,9 +9,20 @@ Route::view('/products', 'products')->name('products');
 
 Route::view('/contact', 'contact')->name('contact');
 
-Route::view('/login', 'login')->name('login');
+//Show registration form
+Route::get('/register', [UserController::class,'create'])->name('register');
 
-Route::view('/register', 'register')->name('register');
+// Create a new user
+Route::post('/auth/register', [UserController::class,'store'])->name('user');
+
+//Show login form
+Route::get('/login', [UserController::class, 'login'])->name('login');
+
+//Authenticate user
+Route::post('/auth/login', [UserController::class, 'authenticate'])->name('authenticate');
+
+//Log user out
+Route::post('/logout', [UserController::class,'logout'])->name('logout');
 
 Route::view('/cart', 'cart')->name('cart');
 
