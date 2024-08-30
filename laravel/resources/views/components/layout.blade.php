@@ -7,6 +7,7 @@
   <title>2112 @stack('title')</title>
   <meta name="description" content="21/12 is a clothing company where customers can order or pickup already made clothe or make a custom order of clothe for yourself.">
   <meta name="keywords" content="clothing, twenty one twelve, 2112,21/12, online clothing store, store">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{asset('css/main.css')}}">
   <link rel="stylesheet" href="{{asset('css/swiper-bundle.min.css')}}">
   @stack('style')

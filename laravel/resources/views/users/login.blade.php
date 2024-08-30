@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>21/12 Sign-in</title>
   <style>
     * {
@@ -107,18 +108,18 @@
   <div class="login-page">
     <span class="login">LOGIN</span>
 
-    <form action="/auth/login" method="post">
+    <form action="/auth/login" method="POST">
       @csrf
       <label for="email" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Email</b></label>
       <input type="text" name="email" placeholder="Enter your email" value="{{old('email')}}" required>
       @error('email')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="justify-self:start; color: red; display:block; font-style:italic;  margin: 10px 0px 0px 10px">{{$message}}</small>
       @enderror
 
       <label for="password" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Password</b></label>
       <input type="password" name="password" placeholder="Enter your password" value="{{old('password')}}" required>
       @error('password')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="justify-self:start; color: red; display:block; font-style:italic;  margin: 10px 0px 0px 10px">{{$message}}</small>
       @enderror
       <a class="forgot-pass" href="">forgot password?</a>
       <button type="submit">Login</button>

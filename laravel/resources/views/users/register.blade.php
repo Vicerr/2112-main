@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>21/12 Sign-up</title>
   <style>
     * {
@@ -107,7 +108,7 @@
   <div class="login-page">
     <span class="login">REGISTER</span>
 
-    <form action="/auth/register" method="post">
+    <form action="/auth/register" method="POST">
       @csrf
       <label for="first_name" style="justify-self: start; margin: 10px 0px 0px 10px"><b>First Name</b></label>
       <input type="text" name="first_name" placeholder="Enter First Name" value="{{old('first_name')}}" required>
