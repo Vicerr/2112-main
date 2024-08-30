@@ -108,13 +108,23 @@
     <span class="login">LOGIN</span>
 
     <form action="/auth/login" method="post">
-      <input type="text" name="email" placeholder="Email" required>
-      <input type="password" name="password" placeholder="Password" required>
+      @csrf
+      <label for="email" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Email</b></label>
+      <input type="text" name="email" placeholder="Enter your email" value="{{old('email')}}" required>
+      @error('email')
+        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+      @enderror
+
+      <label for="password" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Password</b></label>
+      <input type="password" name="password" placeholder="Enter your password" value="{{old('password')}}" required>
+      @error('password')
+        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+      @enderror
       <a class="forgot-pass" href="">forgot password?</a>
       <button type="submit">Login</button>
     </form>
     <br>
-    <p>Don't have an account? <a href="/auth/register">Click here</a> to register.</p>
+    <p>Don't have an account? <a href="{{ route('register') }}">Click here</a> to register.</p>
   </div>
 
   <br>

@@ -47,6 +47,8 @@
 
     </div>
   </nav>
+  <x-flash-message />
+  <x-error-message />
   <main>
     {{$slot}}
   </main>
