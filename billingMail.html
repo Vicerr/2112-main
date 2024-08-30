@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billing Mail</title>
+</head>
+
+<body>
+  <h3>Billing Details:</h3>
+  <p><strong>Phone:</strong> N/A</p>
+  <p><strong>Address:</strong>N/A</p>
+  <p><strong>City:</strong>N/A</p>
+  <p><strong>Landmark:</strong> N/A</p>
+  <p><strong>Delivery Type:</strong> N/A</p>
+
+
+  <h2>Victor odoi placed orders on 22nd july 2024
+  </h2>
+
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+    <thead>
+      <tr style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Item Name</th>
+        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Size</th>
+        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Quantity</th>
+        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Price</th>
+        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+        <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Polo</td>
+        <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">M</td>
+        <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">4</td>
+        <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">&#8358 200</td>
+        <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">400</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr />
+  <p><strong>Total Summation of All Orders: &#8358 400</strong></p>
+  <br>
+  <!-- please ensure to put the users email and username dynamically in the href -->
+  <a style='padding: 1em; display: inline-block; margin-right: 10px; border-radius: 4px; background-color: #204e82; text-decoration: none; color: white;' href='mailto:$?subject=Confirmed%20order%20from%2021/12&body=Dear%20${
+                    req.user.username
+                },%20your%20orders%20placed%20on%202112%20have%20been%20confirmed.%0AThank%20you%20for%20working%20with%20us.'>Confirmed</a>
+
+</body>
+
+</html>
