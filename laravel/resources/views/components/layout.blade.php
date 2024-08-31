@@ -27,17 +27,32 @@
           <button id="close-navigation" onclick="toggleNav()">
             <div class="cross"></div>
           </button>
-          <ul class="nav-items">
+          <ul class="nav-items pointer">
             <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-
             <li><a class="nav-link" href="{{ route('products') }}">Collections</a></li>
-            <li><a class="nav-link hide" href="/checkout.html">Orders</a></li>
-            <li><a class="nav-link hide" href="/cart.html">Cart</a></li>
+            <li><a class="nav-link hide" href="{{ route('checkout') }}">Orders</a></li>
+            <li><a class="nav-link hide" href="{{ route('cart') }}">Cart</a></li>
             <li><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
+            @if (auth()->check())
+              @if (auth()->user()->role != 'user')
+              <li><a class="nav-link" href="{{ route('dashboard') }}">Admin</a></li>
+              @endif
+            @endif
+            @if (auth()->check())
+              <form class="link-item" method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a role="button" type="submit" class="nav-link">
+                <button style="all:unset; color: #024e82; font-weight: 600;"> Logout </button>
+                </a>
+              </form>
+            @else
+                <li><a class="nav-link" href="{{ route('register') }}"> Sign up </a></li>
+                <li><a class="nav-link" href="{{ route('login') }}"> Login</a></li>
+            @endif
           </ul>
           <div class="actions">
-            <a href="./cart.html" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt=""></a>
-            <a href="./dashboard.html" class="icon" data-counter="10"><img src="{{ asset('images/icons/envelope.svg') }}" alt=""></a href="">
+            <a href="{{ route('cart') }}" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt=""></a>
+            <a href="{{ route('dashboard') }}" class="icon" data-counter="10"><img src="{{ asset('images/icons/envelope.svg') }}" alt=""></a href="">
           </div>
         </div>
         <button id="open-navigation" onclick="toggleNav()">
@@ -83,6 +98,12 @@
     <img src="{{asset('images/icons/whatsapp.svg')}}" alt="">
     <a href=""></a>
   </div>
+  <!-- EXTERNAL JAVASCRIPT -->
+  <script language="JavaScript" type="text/javascript" src="http://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  
+  <!-- JAVASCRIPT FILES -->
+  <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
 </body>
 
 </html>
