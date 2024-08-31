@@ -113,31 +113,31 @@
       <label for="first_name" style="justify-self: start; margin: 10px 0px 0px 10px"><b>First Name</b></label>
       <input type="text" name="first_name" placeholder="Enter First Name" value="{{old('first_name')}}" required>
       @error('first_name')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
       @enderror
 
       <label for="last_name" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Last Name</b></label>
       <input type="text" name="last_name" placeholder="Enter Last Name" value="{{old('last_name')}}" required>
       @error('last_name')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
       @enderror
       
       <label for="email" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Email</b></label>
       <input type="text" name="email" placeholder="Enter Email address" value="{{old('email')}}" required>
       @error('email')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
       @enderror
 
       <label for="password" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Password</b></label>
       <input type="password" name="password" placeholder="Enter Password"  value="{{old('password')}}" required>
       @error('password')
-        <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
       @enderror
       
       <label for="password_confirmation" style="justify-self: start; margin: 10px 0px 0px 10px"><b>Confirm Password</b></label>
       <input type="password" placeholder="Repeat Password" name="password_confirmation" value="{{old('password_confirmation')}}" required>
       @error('password_confirmation')
-          <small style="color:red; display:block; font-style:italic;">{{$message}}</small>
+          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
       @enderror
       <button type="submit">Register Account</button>
     </form>
