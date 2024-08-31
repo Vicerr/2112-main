@@ -1,8 +1,35 @@
+$(document).ready(function () {
+    // FLASH MESSAGE FUNCTIONALITY
+    function showFlashMessage() {
+        $('#flash-message').addClass('show');
+        setTimeout(function () {
+            hideFlashMessage();
+        }, 3000);
+    }
+
+    // Hide flash message
+    function hideFlashMessage() {
+        $('#flash-message').removeClass('show')
+    }
+
+    showFlashMessage();
+
+    // Handle cancel button
+    $('#closebtn').on('click', function () {
+        hideFlashMessage();
+    });
+});
+
+function toggleNav() {
+    document.getElementById("nav-misc").classList.toggle("nav-opened")
+    document.body.classList.toggle("no-scroll")
+}
+
+
 // if (document.title === "Product") {
 //     document.getElementById("productOrderForm").addEventListener("submit", (e) => {
 //         e.preventDefault()
 //     })
-
 //     let selectButtons = document.querySelectorAll(".select-btn")
 //     selectButtons.forEach((button) => {
 //         button.addEventListener("click", (e) => {
@@ -14,7 +41,6 @@
 //             document.getElementById("select").setAttribute("value", `${e.target.textContent}`)
 //         })
 //     })
-
 //     let count = document.getElementById("display-order-count")
 //     let currentCount = 1
 //     document.getElementById("increment").addEventListener("click", increment)
@@ -68,7 +94,6 @@
 // function submitBillingDetailsForm() {
 //     document.getElementById("order-form").submit()
 // }
-
 // let deliveryType = document.querySelectorAll(".delivery-method .delivery-type")
 // deliveryType.forEach((type) => {
 //     type.onclick = () => {
@@ -86,12 +111,10 @@
 //         // })
 //     }
 // })
-
 // function toggleNav() {
 //     document.getElementById("nav-misc").classList.toggle("nav-opened")
 //     document.body.classList.toggle("no-scroll")
 // }
-
 // const links = document.querySelectorAll(".nav-link")
 // links.forEach((link) => {
 //     let activeLink = link.getAttribute("href")
@@ -99,7 +122,6 @@
 //         link.setAttribute("aria-current", "true")
 //     }
 // })
-
 // document.querySelectorAll(".filter--button").forEach((button) => {
 //     button.onclick = () => {
 //         document.querySelectorAll(".filter--button").forEach((button) => {
@@ -116,14 +138,12 @@
 //         })
 //     }
 // })
-
 // function openModal() {
 //     document.getElementById("modal").showModal()
 // }
 // function closeModal() {
 //     document.getElementById("modal").close()
 // }
-
 // let stars = document.querySelectorAll(".star-rating-send span")
 // stars.forEach((star, index) => {
 //     star.addEventListener("click", function () {
@@ -136,45 +156,11 @@
 //         setStarRating.setAttribute("value", `${5 - index}`)
 //     })
 // })
-
 // let itemColor = document.querySelector(".item-color")
 // itemColor.style.backgroundColor = itemColor.dataset.color
 
-function appendImages(parentElement, star) {
-    for (let i = 0; i < star; i++) {
-        let img = document.createElement("img")
-        img.src = "assets/icons/star.svg"
-        img.alt = "star"
-        parentElement.appendChild(img)
-    }
-}
-function submitProductOrderForm() {
-    document.getElementById("productOrderForm").submit()
-}
-function appendImagesNone(parentElement, star) {
-    for (let i = 0; i < star; i++) {
-        let img = document.createElement("img")
-        img.src = "assets/icons/nostar.svg"
-        img.alt = "star"
-        parentElement.appendChild(img)
-    }
-}
-document.querySelectorAll(".card--rating, .star-rating").forEach((card) => {
-    if (!isNaN(card.dataset.rating) && card.dataset.rating <= 5 && card.dataset.rating > 0) {
-        let star = Number(card.dataset.rating)
-        appendImages(card, star)
-        appendImagesNone(card, 5 - star)
-    } else {
-        appendImagesNone(card, 5)
-    }
-})
 function submitBillingDetailsForm() {
     document.getElementById("order-form").submit()
-}
-
-function toggleNav() {
-    document.getElementById("nav-misc").classList.toggle("nav-opened")
-    document.body.classList.toggle("no-scroll")
 }
 
 const links = document.querySelectorAll(".nav-link")
@@ -184,6 +170,7 @@ links.forEach((link) => {
         link.setAttribute("aria-current", "true")
     }
 })
+
 document.querySelectorAll(".filter--button").forEach((button) => {
     button.onclick = () => {
         document.querySelectorAll(".filter--button").forEach((button) => {
@@ -204,6 +191,7 @@ document.querySelectorAll(".filter--button").forEach((button) => {
 let deliveryChoice = document.getElementById("deliveryTypeInput")
 const choice = deliveryChoice.value
 let deliveryType = document.querySelectorAll(".delivery-method .delivery-type")
+
 deliveryType.forEach((type) => {
     type.onclick = () => {
         deliveryType.forEach((t) => t.classList.remove("active"))
@@ -223,13 +211,13 @@ deliveryType.forEach((type) => {
         hideBillingSection(choice)
     }
 })
+
 function addInputs() {
     if (!document.querySelector(".billing-address [name='address']")) {
         let billingInputs = `<label for="billing-address">Billing Address</label>
         <input type="text" name="city" id="" placeholder="City" required>
         <input type="text" name="address" id="" placeholder="Address" required>
         <input type="text" name="landmark" id="" placeholder="Closest Landmark" required>`
-
         let tempContainer = document.createElement("div")
         tempContainer.innerHTML = billingInputs
         while (tempContainer.firstChild) {
@@ -237,7 +225,9 @@ function addInputs() {
         }
     }
 }
+
 addInputs()
+
 function hideBillingSection(choice) {
     if (choice == "pickup") {
         document.querySelector(".billing-address [name='city']").remove()
@@ -253,6 +243,7 @@ function hideBillingSection(choice) {
 function openModal() {
     document.getElementById("modal").showModal()
 }
+
 function closeModal() {
     document.getElementById("modal").close()
 }
@@ -274,27 +265,3 @@ let itemColor = document.querySelector(".item-color")
 if (itemColor) {
     itemColor.style.backgroundColor = itemColor.dataset.color
 }
-
-
-// FLASH MESSAGE FUNCTIONALITY
-
-$(document).ready(function () {
-    function showFlashMessage() {
-        $('#flash-message').addClass('show');
-        setTimeout(function() {
-            hideFlashMessage();
-        }, 3000);
-    }
-
-    // Hide flash message
-    function hideFlashMessage() {
-        $('#flash-message').removeClass('show')
-    }
-    showFlashMessage();
-
-    // Handle cancel button
-    $('#closebtn').on('click', function() {
-        hideFlashMessage();
-    });
-
-});
