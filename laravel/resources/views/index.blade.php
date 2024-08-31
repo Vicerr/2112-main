@@ -97,7 +97,13 @@
     <h2>What people say about us</h2>
     <div class="wrapper">
       <div class="review--card">
-        <div class="card--rating" data-rating="5"></div>
+        <div class="card--rating">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+        </div>
 
         <div class="review--content">
           <p>
@@ -114,7 +120,13 @@
         </div>
       </div>
       <div class="review--card">
-        <div class="card--rating" data-rating="4"></div>
+        <div class="card--rating">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+        </div>
         <div class="review--content">
           <p>
             Beautiful shirts, luxurious fabric. Runs slightly small, but easy exchange process. Will shop here again.
@@ -130,7 +142,13 @@
         </div>
       </div>
       <div class="review--card">
-        <div class="card--rating" data-rating="5"></div>
+        <div class="card--rating">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/star.svg') }}" alt="star">
+          <img src="{{ asset('images/icons/nostar.svg') }}" alt="star">
+        </div>
 
         <div class="review--content">
           <p>
