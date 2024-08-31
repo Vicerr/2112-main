@@ -10,27 +10,9 @@
 
   <!-- Fonts and icons -->
   <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ["Public Sans:300,400,500,600,700"]
-      },
-      custom: {
-        families: [
-          "Font Awesome 5 Solid",
-          "Font Awesome 5 Regular",
-          "Font Awesome 5 Brands",
-          "simple-line-icons",
-        ],
-        urls: ["{{ asset('css/fonts.min.css') }}"],
-      },
-      active: function() {
-        sessionStorage.fonts = true;
-      },
-    });
-  </script>
 
   <!-- CSS Files -->
+  <link rel="stylesheet" href="{{ asset('css/image-uploader.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
@@ -72,7 +54,7 @@
             <li class="nav-item">
               <a href="{{ route('dashboard') }}" class="collapsed" aria-expanded="false">
                 <i class="fas fa-home"></i>
-                <p>Dashboard</p>
+                <p>Overview</p>
               </a>
             </li>
 
@@ -154,7 +136,7 @@
                   </div> -->
                   <span class="profile-username">
                     <span class="op-7">Hi,</span>
-                    <span class="fw-bold">Admin</span>
+                    <span class="fw-bold">{{ auth()->user()->first_name }}</span>
                   </span>
                 </a>
               </li>
@@ -167,7 +149,7 @@
         <div class="page-inner">
           <div class="row">
             <div class="col-md-12">
-              <form class="card" id="upload-form" method="post" action="/dashboard/api/additem" enctype="multipart/form-data">
+              <form class="card" id="upload-form" method="post" action="/product/create" enctype="multipart/form-data">
                 <div class="card-header">
                   <div class="card-title">Create Item</div>
                 </div>
@@ -176,14 +158,25 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="productName">Product Name</label>
-                        <input type="text" class="form-control" name="name" required id="email2" placeholder="Product Name" />
-
+                        <input type="text" class="form-control" name="name" required value="{{ old('name') }}" placeholder="Product Name" />
+                        @error('name')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
                       </div>
                       <div class="form-group">
                         <label for="product-price">Product Price</label>
-                        <input pattern="\d+" title="must be a positive number" type="text" min="1" class="form-control" name="price" required id="password" placeholder="Product Price" />
+                        <input pattern="\d+" title="must be a positive number" type="number" min="1" class="form-control" name="price" required value="{{ old('price') }}" placeholder="Product Price" />
+                        @error('price')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
                       </div>
-
+                      <div class="form-group">
+                        <label for="product-price">Product Description</label>
+                        <textarea type="textarea" class="form-control" name="desc" value="{{ old('desc') }}" required placeholder="Product Description"></textarea>
+                        @error('desc')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <div class="row ">
@@ -191,79 +184,65 @@
 
                           <div class="form-group">
                             <label for="tag">Tag</label>
-                            <input type="text" required class="form-control" id="text" name="tag" placeholder="Tag" />
+                            <input type="text" required class="form-control" id="text" name="tag" value="{{ old('tag') }}" placeholder="Tag" />
+                            @error('tag')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
                           </div>
                         </div>
 
                         <div class="col-6">
                           <div class="form-group">
                             <label for="color">Color</label>
-                            <input type="text" required name="color" class="form-control" id="email2" placeholder="Enter Valid Color Name" />
-
+                            <input type="text" required name="color" class="form-control" value="{{ old('color') }}" placeholder="Enter Valid Color Name" />
+                            @error('color')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
                           </div>
                         </div>
                         <div class="col-12">
                           <div class="form-group">
                             <label for="password">Upload 5 Images</label>
-                            <input type="file" required name="images" multiple accept="image/*" class="form-control" id="image-upload" placeholder="Choose Images" />
-                            <small id="img-err-text"></small>
+                            <div id="app"></div>
+                            <input type="file" id="fileInput" multiple name="file[]" hidden value="{{ old('file') }}" />
+                            @error('file')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
+                            <div class="uploader" id="fileSelect">
+                              <div id="content" class="content">
+                                <p id="content-action">
+                                </p>
+                              </div>
+                            </div>
+                            <div id="oit" class="other-image-thumbnails"></div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
-                <button class="add-item" type="submit" hidden></button>
+                <div class="card-action">
+                  <button type="submit" class="btn btn-success submit-add-item">Submit</button>
+                  <button type="reset" class="btn btn-danger">Cancel</button>
+                </div>
               </form>
 
             </div>
-            <div class="card-action">
-              <button type="submit" class="btn btn-success submit-add-item">Submit</button>
-              <button class="btn btn-danger">Cancel</button>
-            </div>
-            <script>
-              document.querySelector(".submit-add-item").onclick = () => {
-                document.querySelector(".add-item").click()
-              }
-            </script>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <footer class="footer">
-    <div class="container-fluid d-flex justify-content-between">
-      <nav class="pull-left">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="http://www.themekita.com">
-              ThemeKita
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"> Help </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"> Licenses </a>
-          </li>
-        </ul>
-      </nav>
-      <div class="copyright">
-        2024, made with <i class="fa fa-heart heart text-danger"></i> by
-        <a href="http://www.themekita.com">ThemeKita</a>
-      </div>
-      <div>
-        Distributed by
-        <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
-      </div>
-    </div>
-  </footer>
   <!-- Custom template | don't include it in your project! -->
 
   <!-- End Custom template -->
   <!--   Core JS Files   -->
-  <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="http://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/f71a44a4e4.js" crossorigin="anonymous"></script>
+
+  <!-- JAVASCRIPT FILES -->
+  <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
+  <script type="module" src="{{ asset('js/imageUploader.js')}}"></script>
   <script src="{{ asset('js/core/popper.min.js') }}"></script>
   <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
 
