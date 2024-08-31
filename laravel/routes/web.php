@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 Route::view('/', 'index')->name('home');
 
@@ -30,12 +31,12 @@ Route::view('/checkout', 'checkout')->name('checkout');
 
 Route::view('/product', 'product')->name('product');
 
-Route::view('/dashboard', 'dashboard')->name('dashboard');
+Route::get('/dashboard', [AdminController::class,'dashboard'])->name('dashboard');
 
-Route::view('/users', 'users')->name('users');
+Route::get('/users', [AdminController::class,'users'])->name('users');
 
-Route::view('/create', 'create')->name('create');
+Route::get('/create', [AdminController::class,'create'])->name('create');
 
-Route::view('/items', 'items')->name('items');
+Route::get('/items', [AdminController::class,'items'])->name('items');
 
 
