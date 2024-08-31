@@ -71,7 +71,7 @@
             <li class="nav-item">
               <a href="{{ route('dashboard') }}" class="collapsed" aria-expanded="false">
                 <i class="fas fa-home"></i>
-                <p>Dashboard</p>
+                <p>Overview</p>
               </a>
             </li>
 
@@ -153,7 +153,7 @@
                   </div> -->
                   <span class="profile-username">
                     <span class="op-7">Hi,</span>
-                    <span class="fw-bold">Admin</span>
+                    <span class="fw-bold">{{ auth()->user()->first_name }}</span>
                   </span>
                 </a>
               </li>
@@ -167,11 +167,10 @@
           <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
             <div>
               <h3 class="fw-bold mb-3">Dashboard</h3>
-              <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
             </div>
             <div class="ms-md-auto py-2 py-md-0">
-              <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-              <a href="/dashboard/create-product" class="btn btn-primary btn-round">Create Product</a>
+              <a href="{{ route('items') }}" class="btn btn-label-info btn-round me-2">Manage</a>
+              <a href="{{ route('create') }}" class="btn btn-primary btn-round">Create Product</a>
             </div>
           </div>
           <div class="row">
@@ -187,7 +186,7 @@
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Productss</p>
-                        <h4 class="card-title"><%= products %></h4>
+                        <h4 class="card-title">{{ $stat['productCount'] }}</h4>
                       </div>
                     </div>
                   </div>
@@ -206,7 +205,7 @@
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Customers</p>
-                        <h4 class="card-title"><%= users %></h4>
+                        <h4 class="card-title">{{ $stat['userCount'] }}</h4>
                       </div>
                     </div>
                   </div>
@@ -225,7 +224,7 @@
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Sales</p>
-                        <h4 class="card-title">$ 1,345</h4>
+                        <h4 class="card-title">&#8358;{{ $stat['salesCount'] }}</h4>
                       </div>
                     </div>
                   </div>
@@ -244,7 +243,7 @@
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Order</p>
-                        <h4 class="card-title"><%= orders %></h4>
+                        <h4 class="card-title">{{ $stat['orderCount'] }}</h4>
                       </div>
                     </div>
                   </div>
@@ -273,97 +272,35 @@
                     </div>
                   </div>
                   <div class="card-list py-4">
-                    <div class="item-list">
-                      <div class="avatar">
-                        <img src="assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle" />
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Jimmy Denis</div>
-                        <div class="status">Graphic Designer</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
-                    <div class="item-list">
-                      <div class="avatar">
-                        <span class="avatar-title rounded-circle border border-white">CF</span>
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Chandra Felix</div>
-                        <div class="status">Sales Promotion</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
-                    <div class="item-list">
-                      <div class="avatar">
-                        <img src="assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle" />
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Talha</div>
-                        <div class="status">Front End Designer</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
-                    <div class="item-list">
-                      <div class="avatar">
-                        <img src="{{ asset('imgages/chadengle.jpg') }}" alt="..." class="avatar-img rounded-circle" />
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Chad</div>
-                        <div class="status">CEO Zeleaf</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
-                    <div class="item-list">
-                      <div class="avatar">
-                        <span class="avatar-title rounded-circle border border-white bg-primary">H</span>
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Hizrian</div>
-                        <div class="status">Web Designer</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
-                    <div class="item-list">
-                      <div class="avatar">
-                        <span class="avatar-title rounded-circle border border-white bg-secondary">F</span>
-                      </div>
-                      <div class="info-user ms-3">
-                        <div class="username">Farrah</div>
-                        <div class="status">Marketing</div>
-                      </div>
-                      <button class="btn btn-icon btn-link op-8 me-1">
-                        <i class="far fa-envelope"></i>
-                      </button>
-                      <button class="btn btn-icon btn-link btn-danger op-8">
-                        <i class="fas fa-ban"></i>
-                      </button>
-                    </div>
+                    @if ($users->isNotEmpty())
+                        <div class="cards__container grid">
+                          @foreach ($users as $user)
+                            <div class="item-list">
+                              <div class="avatar">
+                                <span class="avatar-title rounded-circle border border-white">{{ substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1) }}</span>
+                              </div>
+                              <div class="info-user ms-3">
+                                <div class="username">{{$user->first_name}} {{$user->last_name}}</div>
+                                <div class="status">{{$user->email}}</div>
+                              </div>
+                              <button class="btn btn-icon btn-link op-8 me-1">
+                                <i class="far fa-envelope"></i>
+                              </button>
+                              <button class="btn btn-icon btn-link btn-danger op-8">
+                                <i class="fas fa-ban"></i>
+                              </button>
+                            </div>            
+                          @endforeach            
+                        </div>
+                    @else
+                        <div class="error-container">
+                            <img src="{{ asset('images/icons/ghost.png') }}" alt="Not users yet" class="fa-beat-fade">
+                            <h1 class="text-center my-2">No users at the moment</h1>
+                            <p class="text-center">Try adjusting your search to find what you are looking for.</p>
+                        </div>
+                    @endif
                   </div>
+                  <div class="pagination__container">{{ $users->links('pagination::default') }}</div>
                 </div>
               </div>
             </div>
@@ -406,7 +343,11 @@
     <!-- End Custom template -->
   </div>
   <!--   Core JS Files   -->
-  <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="http://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/f71a44a4e4.js" crossorigin="anonymous"></script>
+
+  <!-- JAVASCRIPT FILES -->
+  <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
   <script src="{{ asset('js/core/popper.min.js') }}"></script>
   <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
 
@@ -493,6 +434,7 @@
       });
     });
   </script>
+  
 </body>
 
 </html>
