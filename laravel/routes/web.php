@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 
 Route::view('/', 'index')->name('home');
 
@@ -39,4 +40,5 @@ Route::get('/create', [AdminController::class,'create'])->name('create');
 
 Route::get('/items', [AdminController::class,'items'])->name('items');
 
+Route::post('/product/create', [ProductController::class,'create'])->name('stock');
 
