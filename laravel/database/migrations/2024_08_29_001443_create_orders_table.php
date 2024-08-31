@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('status');
+            $table->string('total_price');
             $table->unsignedBigInteger('user_id');
             $table->json('array_of_order_items');
             $table->timestamps();
