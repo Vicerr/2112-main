@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2112 @stack('title')</title>
+  <title>21/12 @stack('title')</title>
   <meta name="description" content="21/12 is a clothing company where customers can order or pickup already made clothe or make a custom order of clothe for yourself.">
   <meta name="keywords" content="clothing, twenty one twelve, 2112,21/12, online clothing store, store">
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -104,6 +104,7 @@
   
   <!-- JAVASCRIPT FILES -->
   <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
+  @stack('script')
 </body>
 
 </html>
