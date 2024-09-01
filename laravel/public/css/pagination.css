@@ -1,0 +1,40 @@
+/* Style for pagination container */
+.pagination__container {
+    margin: 10px 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    border: 2px solid #2d7bd8;
+    border-radius: 5px;
+    display: inline-flex;
+    list-style: none;
+    padding: 10px;
+    justify-content: center;
+}
+
+/* Style for each pagination intem (page number, previous, next) */
+.pagination li {
+    margin: 0 5px;
+}
+
+/* Style for active page */
+.pagination .active {
+    font-weight: bold;
+}
+
+/* Style for the previous and next links */
+.pagination .prev,
+.pagination .next {
+    margin: 0 5px;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Hover effect for previous and next links */
+.pagination .prev:hover,
+.pagination .next:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,50 @@
+/* The flash message box */
+.flash--message {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    padding: 15px;
+    background: linear-gradient(45deg, #2d55d8d2, #0c105a);
+    color: white;
+    transition: right 0.5s ease-in-out;
+}
+
+.flash--message.show {
+    z-index: 1500;
+    right: 0;
+}
+
+/* The error message box */
+.error--message {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    padding: 15px;
+    background: linear-gradient(45deg, #dc3545, #ff2e43);
+    color: white;
+    transition: right 0.5s ease-in-out;
+}
+
+.error--message.show {
+    z-index: 1500;
+    right: 0;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}
