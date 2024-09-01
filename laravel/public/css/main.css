@@ -342,7 +342,7 @@ body {
 }
 
 .container:has(.contact) header {
-  background: url(../assets/images/220304-iphone-call-unsplash-750x375-6692ffb28f1d7.webp) no-repeat center;
+  background: url(../images/220304-iphone-call-unsplash-750x375-6692ffb28f1d7.webp) no-repeat center;
   background-size: cover;
   position: relative;
   margin-bottom: 30px;
