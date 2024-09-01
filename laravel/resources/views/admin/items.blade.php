@@ -10,28 +10,11 @@
 
   <!-- Fonts and icons -->
   <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ["Public Sans:300,400,500,600,700"]
-      },
-      custom: {
-        families: [
-          "Font Awesome 5 Solid",
-          "Font Awesome 5 Regular",
-          "Font Awesome 5 Brands",
-          "simple-line-icons",
-        ],
-        urls: ["{{ asset('css/fonts.min.css') }}"],
-      },
-      active: function() {
-        sessionStorage.fonts = true;
-      },
-    });
-  </script>
-
+  
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/flash-message.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
 
@@ -72,27 +55,27 @@
             <li class="nav-item">
               <a href="{{ route('dashboard') }}" class="collapsed" aria-expanded="false">
                 <i class="fas fa-home"></i>
-                <p>Dashboard</p>
+                <p>Overview</p>
               </a>
             </li>
 
             <li class="nav-item">
               <a href="{{ route('create') }}">
                 <i class="fas fa-th-list"></i>
-                <p>Create Items</p>
+                <p>Create Products</p>
               </a>
 
             </li>
             <li class="nav-item">
-              <a href="{{ route('users') }}">
+              <a href="{{ route('orders') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Users</p>
+                <p>Manage Orders</p>
 
               </a>
             <li class="nav-item">
               <a href="{{ route('items') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Products</p>
+                <p>Manage Products</p>
 
               </a>
               <!-- <li class="nav-item">
@@ -154,7 +137,7 @@
                   </div> -->
                   <span class="profile-username">
                     <span class="op-7">Hi,</span>
-                    <span class="fw-bold">Admin</span>
+                    <span class="fw-bold">{{ auth()->user()->first_name }}</span>
                   </span>
                 </a>
               </li>
@@ -239,38 +222,15 @@
           }
         }
       </script>
-  <footer class="footer">
-    <div class="container-fluid d-flex justify-content-between">
-      <nav class="pull-left">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="http://www.themekita.com">
-              ThemeKita
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"> Help </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"> Licenses </a>
-          </li>
-        </ul>
-      </nav>
-      <div class="copyright">
-        2024, made with <i class="fa fa-heart heart text-danger"></i> by
-        <a href="http://www.themekita.com">ThemeKita</a>
-      </div>
-      <div>
-        Distributed by
-        <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
-      </div>
-    </div>
-  </footer>
   <!-- Custom template | don't include it in your project! -->
 
   <!-- End Custom template -->
   <!--   Core JS Files   -->
-  <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="http://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/f71a44a4e4.js" crossorigin="anonymous"></script>
+  
+  <!-- JAVASCRIPT FILES -->
+  <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
   <script src="{{ asset('js/core/popper.min.js') }}"></script>
   <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
 
