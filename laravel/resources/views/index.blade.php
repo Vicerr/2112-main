@@ -1,6 +1,6 @@
 <x-layout>
+  @push('title')| Home @endpush
 <div class="container">
-
     <div class="hero--section ">
       <p class="hero--title">Discover and Elevate Your own <span>Style</span></p>
       <p class="hero--description text-secondary">Where creativity meets coutute. Explore our exclusive designs, crafted with passion and precision to bring your fashion dreams to life.</p>
