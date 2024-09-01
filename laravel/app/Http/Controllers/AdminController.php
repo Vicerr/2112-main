@@ -36,7 +36,12 @@ class AdminController extends Controller
     }
 
     // Show users page
-    public function users() {
-        return view('admin.users');
+    public function orders() {        
+        $query = Orders::orderBy('id', 'desc')
+        ->where('status', '!=', 'cancelled')
+        ->with('user');
+
+        $orders = $query->paginate(6);
+        return view('admin.orders', ['orders' => $orders,]);
     }
 }
