@@ -13,6 +13,8 @@
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ asset('css/image-uploader.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/flash-message.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
@@ -61,20 +63,20 @@
             <li class="nav-item">
               <a href="{{ route('create') }}">
                 <i class="fas fa-th-list"></i>
-                <p>Create Items</p>
+                <p>Create Products</p>
               </a>
 
             </li>
             <li class="nav-item">
-              <a href="{{ route('users') }}">
+              <a href="{{ route('orders') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Users</p>
+                <p>Manage Orders</p>
 
               </a>
             <li class="nav-item">
               <a href="{{ route('items') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Products</p>
+                <p>Manage Products</p>
 
               </a>
               <!-- <li class="nav-item">
