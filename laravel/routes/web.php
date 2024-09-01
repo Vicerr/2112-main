@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 
 Route::view('/', 'index')->name('home');
@@ -34,7 +35,7 @@ Route::view('/product', 'product')->name('product');
 
 Route::get('/dashboard', [AdminController::class,'dashboard'])->name('dashboard');
 
-Route::get('/users', [AdminController::class,'users'])->name('users');
+Route::get('/orders', [AdminController::class,'orders'])->name('orders');
 
 Route::get('/create', [AdminController::class,'create'])->name('create');
 
@@ -42,3 +43,8 @@ Route::get('/items', [AdminController::class,'items'])->name('items');
 
 Route::post('/product/create', [ProductController::class,'create'])->name('stock');
 
+Route::group(['prefix' => 'order'], function () {
+    Route::get('/{order}', [OrderController::class, 'order']);
+    Route::put('deliver/{order}', [OrderController::class, 'deliver']);
+    Route::delete('cancel/{order}', [OrderController::class, 'cancel']);
+});
