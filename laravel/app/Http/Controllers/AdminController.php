@@ -36,12 +36,38 @@ class AdminController extends Controller
     }
 
     // Show users page
-    public function orders() {        
-        $query = Orders::orderBy('id', 'desc')
-        ->where('status', '!=', 'cancelled')
-        ->with('user');
+    public function orders(Request $request) {        
+        $data = $request->input('filter');
 
-        $orders = $query->paginate(6);
+        if (!empty($data) && $data === 'delivered') {
+            // Data exists in the URL and is delivered
+            $query = Orders::orderBy('id', 'desc')
+            ->where('status', 'delivered')
+            ->with('user');
+    
+            $orders = $query->paginate(6);
+        } elseif (!empty($data) && $data === 'pending') {
+            // Data does not exist in the URL
+            $query = Orders::orderBy('id', 'desc')
+            ->where('status', 'pending')
+            ->with('user');
+    
+            $orders = $query->paginate(6);
+        }  elseif (!empty($data) && $data === 'cancelled') {
+            // Data does not exist in the URL
+            $query = Orders::orderBy('id', 'desc')
+            ->where('status', 'cancelled')
+            ->with('user');
+    
+            $orders = $query->paginate(6);
+        } else {
+            // Data does not exist in the URL
+            $query = Orders::orderBy('id', 'desc')
+            ->where('status', '!=', 'cancelled')
+            ->with('user');
+    
+            $orders = $query->paginate(6);
+        }
         return view('admin.orders', ['orders' => $orders,]);
     }
 }

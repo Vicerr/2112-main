@@ -19,101 +19,6 @@
 
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link rel="stylesheet" href="{{ asset('css/demo.css') }}" />
-  <style>
-    /* The flash message box */
-    .flash--message {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      padding: 15px;
-      background: linear-gradient(45deg, #2d55d8d2, #0c105a);
-      color: white;
-      transition: right 0.5s ease-in-out;
-    }
-
-    .flash--message.show {
-      z-index: 1500;
-      right: 0;
-    }
-
-    /* The error message box */
-    .error--message {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      padding: 15px;
-      background: linear-gradient(45deg, #dc3545, #ff2e43);
-      color: white;
-      transition: right 0.5s ease-in-out;
-    }
-
-    .error--message.show {
-      z-index: 1500;
-      right: 0;
-    }
-
-    /* The close button */
-    .closebtn {
-      margin-left: 15px;
-      color: white;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    /* When moving the mouse over the close button */
-    .closebtn:hover {
-      color: black;
-    }
-
-
-    /* Style for pagination container */
-    .pagination__container {
-      margin: 10px 0px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .pagination {
-      border: 2px solid #2d7bd8;
-      border-radius: 5px;
-      display: inline-flex;
-      list-style: none;
-      padding: 10px;
-      justify-content: center;
-    }
-
-    /* Style for each pagination intem (page number, previous, next) */
-    .pagination li {
-      margin: 0 5px;
-    }
-
-    /* Style for active page */
-    .pagination .active {
-      font-weight: bold;
-    }
-
-    /* Style for the previous and next links */
-    .pagination .prev,
-    .pagination .next {
-      margin: 0 5px;
-      color: #333;
-      cursor: pointer;
-    }
-
-    /* Hover effect for previous and next links */
-    .pagination .prev:hover,
-    .pagination .next:hover {
-      text-decoration: underline;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -246,10 +151,32 @@
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Order List</h4>
+                  <div class="dropdown">
+                    <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
+                        <li class="border-bottom px-2">
+                          <a class="dropdown-item" href="/orders?filter=all">Show All</a>
+                        </li>
+                        <li class="border-bottom p-2">
+                          <a class="dropdown-item" href="/orders?filter=pending">Show Pending</a>
+                        </li>
+                        <li class="border-bottom pt-2 px-2">
+                          <a class="dropdown-item" href="/orders?filter=delivered">Show Delivered</a>
+                        </li>
+                        <li class="pt-2 px-2">
+                          <a class="dropdown-item" href="/orders?filter=cancelled">Show Cancelled</a>
+                        </li>
+                    </ul>
+                  </div>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="display table table-striped table-hover">
+                      @if (count($orders) == 0)
+                          <p class="text-center lead">Nothing to show yet</p>
+                      @else
                       <thead>
                         <tr>
                           <!-- <th>Date Created</th> -->
@@ -271,40 +198,39 @@
                       <tbody>
                         @foreach ($orders as $order)
                         <tr>
-
-
                           <td>{{ $order->user->first_name.' '.$order->user->last_name }}</td>
                           <td> {{ $order->user->email }} </td>
                           <td> {{ $order->status }} </td>
                           <td>
                             <div class="dropdown">
-                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Action
+                              <button class="btn btn-label-info btn-round dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
                               </button>
                               <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
-                                  <li class="border-bottom px-2">
-                                      <form action="/order/deliver/{{ $order->id }}" method="POST" class="dropdown-item">
-                                          @csrf
-                                          <button type="submit" style="all:unset;">Mark as Delivered</button>
-                                      </form>
-                                  </li>
-                                  <li class="border-bottom p-2">
-                                      <a class="dropdown-item" href="/order/{{ $order->id }}">View Order</a>
-                                  </li>
-                                  <li class="pt-2 px-2">
+                                <li class="border-bottom px-2">
+                                  <form action="/order/deliver/{{ $order->id }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    <button type="submit" style="all:unset;">Mark as Delivered</button>
+                                  </form>
+                                </li>
+                                <li class="border-bottom p-2">
+                                  <a class="dropdown-item" href="/order/{{ $order->id }}">View Order</a>
+                                </li>
+                                <li class="pt-2 px-2">
                                       <form action="/order/cancel/{{ $order->id }}" method="POST" class="dropdown-item">
                                           @csrf
                                           <button type="submit" style="all:unset;">Cancel Order</button>
-                                      </form>
-                                  </li>
-                              </ul>
-                            </div>
-                          </td>
-                          
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
+                                        </form>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </td>
+                                
+                              </tr>
+                              @endforeach
+                            </tbody>
+                            @endif
+                          </table>
                     <div class="pagination__container">{{ $orders->links('pagination::default') }}</div>
                   </div>
                 </div>
