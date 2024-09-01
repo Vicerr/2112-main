@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Dashboard</title>
+  <title>21/12 | Dashboard</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="{{ asset('images/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
@@ -13,106 +13,13 @@
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/flash-message.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
 
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link rel="stylesheet" href="../assets-dashboard/css/demo.css" />
-  <style>
-    /* The flash message box */
-    .flash--message {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      padding: 15px;
-      background: linear-gradient(45deg, #2d55d8d2, #0c105a);
-      color: white;
-      transition: right 0.5s ease-in-out;
-    }
-
-    .flash--message.show {
-      z-index: 1500;
-      right: 0;
-    }
-
-    /* The error message box */
-    .error--message {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      padding: 15px;
-      background: linear-gradient(45deg, #dc3545, #ff2e43);
-      color: white;
-      transition: right 0.5s ease-in-out;
-    }
-
-    .error--message.show {
-      z-index: 1500;
-      right: 0;
-    }
-
-    /* The close button */
-    .closebtn {
-      margin-left: 15px;
-      color: white;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    /* When moving the mouse over the close button */
-    .closebtn:hover {
-      color: black;
-    }
-
-
-    /* Style for pagination container */
-    .pagination__container {
-      margin: 10px 0px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .pagination {
-      border: 2px solid #2d7bd8;
-      border-radius: 5px;
-      display: inline-flex;
-      list-style: none;
-      padding: 10px;
-      justify-content: center;
-    }
-
-    /* Style for each pagination intem (page number, previous, next) */
-    .pagination li {
-      margin: 0 5px;
-    }
-
-    /* Style for active page */
-    .pagination .active {
-      font-weight: bold;
-    }
-
-    /* Style for the previous and next links */
-    .pagination .prev,
-    .pagination .next {
-      margin: 0 5px;
-      color: #333;
-      cursor: pointer;
-    }
-
-    /* Hover effect for previous and next links */
-    .pagination .prev:hover,
-    .pagination .next:hover {
-      text-decoration: underline;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -153,20 +60,20 @@
             <li class="nav-item">
               <a href="{{ route('create') }}">
                 <i class="fas fa-th-list"></i>
-                <p>Create Items</p>
+                <p>Create Products</p>
               </a>
 
             </li>
             <li class="nav-item">
-              <a href="{{ route('users') }}">
+              <a href="{{ route('orders') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Users</p>
+                <p>Manage Orders</p>
 
               </a>
             <li class="nav-item">
               <a href="{{ route('items') }}">
                 <i class="fas fa-pen-square"></i>
-                <p>Products</p>
+                <p>Manage Products</p>
 
               </a>
               <!-- <li class="nav-item">
