@@ -45,9 +45,9 @@ class User extends Authenticatable
         ];
     }
     public function orders() {
-        return $this->hasMany(orders::class);
+        return $this->hasMany(orders::class, 'user_id');
     }
     public function billing() {
-        return $this->hasMany(billing::class);
+        return $this->hasMany(billing::class, 'user_id');
     }
 }
