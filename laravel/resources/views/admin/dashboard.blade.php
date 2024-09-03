@@ -284,7 +284,7 @@
                         </div>
                     @endif
                   </div>
-                  <div class="pagination__container">{{ $users->links('pagination::default') }}</div>
+                  <div class="pagination__container">{{ $users->appends(request()->except('page'))->links('pagination::default') }}</div>
                 </div>
               </div>
             </div>

@@ -217,7 +217,7 @@
                           </tbody>
                         @endif
                       </table>
-                    <div class="pagination__container">{{ $orders->links('pagination::default') }}</div>
+                    <div class="pagination__container">{{ $orders->appends(request()->except('page'))->links('pagination::default') }}</div>
                   </div>
                 </div>
               </div>
