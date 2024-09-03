@@ -148,6 +148,8 @@
         <div class="page-inner">
           <div class="row">
             <div class="col-md-12">
+              <x-flash-message />
+              <x-error-message /> 
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Order List</h4>
@@ -208,29 +210,22 @@
                               </button>
                               <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
                                 <li class="border-bottom px-2">
-                                  <form action="/order/deliver/{{ $order->id }}" method="POST" class="dropdown-item">
-                                    @csrf
-                                    <button type="submit" style="all:unset;">Mark as Delivered</button>
-                                  </form>
+                                  <a class="dropdown-item" href="/order/deliver/{{ Crypt::encryptString($order->id) }}"> Mark as Delivered </a>
                                 </li>
                                 <li class="border-bottom p-2">
-                                  <a class="dropdown-item" href="/order/{{ $order->id }}">View Order</a>
+                                  <a class="dropdown-item" href="/order/{{ Crypt::encryptString($order->id) }}">View Order</a>
                                 </li>
                                 <li class="pt-2 px-2">
-                                      <form action="/order/cancel/{{ $order->id }}" method="POST" class="dropdown-item">
-                                          @csrf
-                                          <button type="submit" style="all:unset;">Cancel Order</button>
-                                        </form>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </td>
-                                
-                              </tr>
-                              @endforeach
-                            </tbody>
-                            @endif
-                          </table>
+                                  <a class="dropdown-item" href="/order/cancel/{{ Crypt::encryptString($order->id) }}">Cancel Order</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          </tr>
+                          @endforeach
+                          </tbody>
+                        @endif
+                      </table>
                     <div class="pagination__container">{{ $orders->links('pagination::default') }}</div>
                   </div>
                 </div>
