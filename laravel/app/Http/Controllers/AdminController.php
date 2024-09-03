@@ -31,11 +31,42 @@ class AdminController extends Controller
     }
 
     // Show items page
-    public function items() {
-        return view('admin.items');
+    public function items(Request $request) {
+        $data = $request->input('sort');
+
+        if (!empty($data) && $data === 'date-desc') {
+            $query = Products::orderBy('created_at', 'desc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'date-asc') {
+            $query = Products::orderBy('created_at', 'asc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'name-desc') {
+            $query = Products::orderBy('name', 'desc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'name-asc') {
+            $query = Products::orderBy('name', 'asc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'price-desc') {
+            $query = Products::orderBy('price', 'desc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'price-asc') {
+            $query = Products::orderBy('name', 'desc')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } else {
+            $query = Products::orderBy('id', 'desc')->filter(request(['search']));
+            $products = $query->paginate(6);
+        }
+
+        return view('admin.items', ['products' => $products]);
     }
 
-    // Show users page
+    // Show orders page
     public function orders(Request $request) {        
         $data = $request->input('filter');
 
