@@ -188,15 +188,6 @@
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tfoot>
-                        <tr>
-                          <!-- <th>Date Created</th> -->
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </tfoot>
                       <tbody>
                         @foreach ($orders as $order)
                         <tr>
