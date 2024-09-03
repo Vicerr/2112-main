@@ -12,21 +12,17 @@ class Products extends Model
     protected $primaryKey = 'product_id';
 
     public function scopeFilter($query, array $filters) {
-        if($filters['tag'] ?? false) {
-            $query->where('tags', 'like', '%' . request('tag') . '%');
-        }
-
         if($filters['search'] ?? false) {
-            $query->where('title', 'like', '%' . request('search') . '%')
-                ->orWhere('desc', 'like', '%' . request('search') . '%');
+            $query->where('name', 'like', '%' . request('search') . '%')
+                ->orWhere('tag', 'like', '%' . request('search') . '%');
         }
     }
 
     public function images() {
-        return $this->hasMany(Images::class);
+        return $this->hasMany(Images::class, 'product_id');
     }
     
     public function order_items() {
-        return $this->hasMany(Order_items::class);
+        return $this->hasMany(Order_items::class, 'product_id');
     }
 }
