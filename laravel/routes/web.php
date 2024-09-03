@@ -43,8 +43,8 @@ Route::get('/items', [AdminController::class,'items'])->name('items');
 
 Route::post('/product/create', [ProductController::class,'create'])->name('stock');
 
-Route::group(['prefix' => 'order'], function () {
-    Route::get('/{order}', [OrderController::class, 'order']);
-    Route::put('deliver/{order}', [OrderController::class, 'deliver']);
-    Route::delete('cancel/{order}', [OrderController::class, 'cancel']);
-});
+Route::get('order/{order}', [OrderController::class, 'order']);
+
+Route::get('order/deliver/{order}', [OrderController::class, 'deliver']);
+
+Route::get('order/cancel/{order}', [OrderController::class, 'cancel']);
