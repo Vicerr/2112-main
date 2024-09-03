@@ -151,6 +151,8 @@
         <div class="page-inner">
           <div class="row">
             <div class="col-md-12">
+              <x-flash-message />
+              <x-error-message /> 
               <form class="card" id="upload-form" method="post" action="/product/create" enctype="multipart/form-data">
                 <div class="card-header">
                   <div class="card-title">Create Item</div>

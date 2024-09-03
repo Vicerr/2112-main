@@ -150,6 +150,8 @@
         <div class="page-inner">
           <div class="row">
             <div class="col-md-12">
+              <x-flash-message />
+              <x-error-message /> 
               <div class="card">
                 <div class="card-header" style="display: flex; justify-content: space-between; ">
                   <h4 class="card-title">Item List</h4>
