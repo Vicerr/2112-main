@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Dashboard</title>
+  <title>21/12 | Products</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="{{ asset('images/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
@@ -154,18 +154,61 @@
               <x-error-message /> 
               <div class="card">
                 <div class="card-header" style="display: flex; justify-content: space-between; ">
-                  <h4 class="card-title">Item List</h4>
-                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="submit" class="btn btn-primary"><a href="/dashboard/create-product" style="color: white;">Add New Product</a></button>
-                    <form action="/dashboard/items/delete-all-products?_method=DELETE" method="post">
-                      <button id="deleteAll" type="submit" hidden></button>
-                    </form>
-                    <button onclick="triggerDeleteBtn()" type="submit" class="btn btn-danger fs-2x" title="Delete all Products">&#x1f5d1</button>
-                  </div>
+                  <h4 class="card-title">Products List</h4>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dropdown">
+                          <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              Sort By
+                          </button>
+                          @php
+                           if (count(request()->query()) > 0) {
+                            $array = request()->query();
+                            unset($array['sort']);
+                            $message = "&".http_build_query($array);
+                           } else {
+                            $message = "";
+                           }  
+                          @endphp
+                          <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
+                              <li class="border-bottom px-2">
+                                <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Newest date first</a>
+                              </li>
+                              <li class="border-bottom p-2">
+                                <a class="dropdown-item" href="/items?sort=date-asc?{{ $message }}">Oldest date first</a>
+                              </li>
+                              <li class="border-bottom pt-2 px-2">
+                                <a class="dropdown-item" href="/items?sort=name-desc{{ $message }}">Name A &RightArrow; Z </a>
+                              </li>
+                              <li class="border-bottom pt-2 px-2">
+                                <a class="dropdown-item" href="/items?sort=name-asc{{ $message }}">Name Z &RightArrow; A</a>
+                              </li>
+                              <li class="border-bottom pt-2 px-2">
+                                <a class="dropdown-item" href="/items?sort=price-desc{{ $message }}">Lowest price first</a>
+                              </li>
+                              <li class="pt-2 px-2">
+                                <a class="dropdown-item" href="/items?sort=price-asc{{ $message }}">Highest price first</a>
+                              </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                      <div>
+                        <form action="{{ route('items') }}" method="get">
+                          <div class="input-group">
+                            <input name="search" type="text" class="form-control" placeholder="Search product name or tag" aria-label="Search">
+                            <div class="input-group-append">
+                              <button class="btn btn-label-info btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                          </div> 
+                        </form>
+                      </div>
+                    </div>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table id="multi-filter-select" class="display table table-striped table-hover">
+                    <table class="display table table-striped table-hover">
                       <thead>
                         <tr>
                           <th>Date Created</th>
@@ -176,37 +219,45 @@
                           <th>Tag</th>
                         </tr>
                       </thead>
-                      <tfoot>
-                        <tr>
-                          <th>Date Created</th>
-
-                          <!-- <th>ID</th> -->
-                          <th>Product Name</th>
-                          <th>Color</th>
-                          <th>Price</th>
-                          <th>Tag</th>
-                        </tr>
-                      </tfoot>
                       <tbody>
-                        <% items.forEach(item => { %>
+                        @foreach ($products as $product)
                         <tr>
-                          <td><%= item.created_at %></td>
-                          <!-- <td><%= item._id %> </td> -->
-                          <td><%= item.name %> </td>
-                          <td><%= item.color %> </td>
-                          <td><%= item.price %> </td>
-                          <td><%= item.tag %> </td>
                           <td>
-                            <a href="/dashboard/items/<%= item.id %>"> View Item</a>
-                            <form action="/dashboard/api/deleteitem/<%= item.id %>?_method=DELETE" method="post">
-                              <button type="submit">Delete Item</button>
-                            </form>
+                            {{ $product->created_at->format('M d, Y') }}
+                            <br>
+                            {{ $product->created_at->format('h:i A') }}
+                          </td>
+                          <!-- <td><%= item._id %> </td> -->
+                          <td>{{ $product->name }}</td>
+                          <td>{{ $product->color }}</td>
+                          <td>{{ $product->price }}</td>
+                          <td{{ $product->tag }}</td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-label-info btn-round dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
+                                <li class="border-bottom pb-2 px-2">
+                                  <a class="dropdown-item" href="/product/{{ $product->id }}"> View Product </a>
+                                </li>
+                                <li class="border-bottom p-2">
+                                  <a class="dropdown-item" href="/edit/{{ $product->id }}">Edit Product</a>
+                                </li>
+                                <li class="pt-2 px-2">
+                                  <form action="/product/cancel/{{ $product->id }}" method="DELETE" class="dropdown-item">
+                                    @csrf
+                                      <button type="submit" style="all:unset;">Delete Product</button>
+                                  </form>
+                                </li>
+                              </ul>
+                            </div>
                           </td>
                         </tr>
-                        <% }); %>
-
+                        @endforeach
                       </tbody>
                     </table>
+                    <div class="pagination__container">{{ $products->appends(request()->except('page'))->links('pagination::default') }}</div>
                   </div>
                 </div>
               </div>
@@ -260,97 +311,6 @@
 
   <!-- Kaiadmin JS -->
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
-
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script>
-    $(document).ready(function() {
-      $("#basic-datatables").DataTable({});
-
-      $("#multi-filter-select").DataTable({
-        pageLength: 5,
-        initComplete: function() {
-          this.api()
-            .columns()
-            .every(function() {
-              var column = this;
-              var select = $(
-                  '<select class="form-select"><option value=""></option></select>'
-                )
-                .appendTo($(column.footer()).empty())
-                .on("change", function() {
-                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                  column
-                    .search(val ? "^" + val + "$" : "", true, false)
-                    .draw();
-                });
-
-              column
-                .data()
-                .unique()
-                .sort()
-                .each(function(d, j) {
-                  select.append(
-                    '<option value="' + d + '">' + d + "</option>"
-                  );
-                });
-            });
-        },
-      });
-
-      // Add Row
-      $("#add-row").DataTable({
-        pageLength: 5,
-      });
-
-      var action =
-        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-      $("#addRowButton").click(function() {
-        $("#add-row")
-          .dataTable()
-          .fnAddData([
-            $("#addName").val(),
-            $("#addPosition").val(),
-            $("#addOffice").val(),
-            action,
-          ]);
-        $("#addRowModal").modal("hide");
-      });
-    });
-    let uploadForm = document.getElementById("upload-form")
-    let uploadImages = document.getElementById("image-upload")
-    let errMessage = document.getElementById("img-err-text")
-
-    function validateFiles() {
-      let files = uploadImages.files
-      errMessage.textContent = ''
-      let isValid = true
-      if (files.length !== 5) {
-        errMessage.textContent = "Upload exactly 5 images"
-        uploadImages.value = ""
-        isValid = false
-      }
-      Array.from(files).forEach(file => {
-        if (file.size > 1 * 1024 * 1024) {
-          errMessage.textContent = `${file.name} is bigger than 1mb`
-          isValid = false
-        }
-
-      })
-
-      return isValid
-    }
-    uploadImages.addEventListener("change", validateFiles)
-    uploadForm.addEventListener("submit", function(e) {
-      let valid = validateFiles()
-      if (!valid) {
-        e.preventDefault()
-      }
-    })
-    console.log(isValid)
-  </script>
-
 </body>
 
 </html>
