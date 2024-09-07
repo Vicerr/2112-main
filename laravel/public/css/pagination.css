@@ -13,6 +13,13 @@
     list-style: none;
     padding: 10px;
     justify-content: center;
+    text-decoration: none;
+}
+
+a:-webkit-any-link {
+    color: #333;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 /* Style for each pagination intem (page number, previous, next) */
