@@ -8,8 +8,6 @@ use App\Http\Controllers\ProductController;
 
 Route::view('/', 'index')->name('home');
 
-Route::view('/products', 'products')->name('products');
-
 Route::view('/contact', 'contact')->name('contact');
 
 //Show registration form
@@ -31,8 +29,6 @@ Route::view('/cart', 'cart')->name('cart');
 
 Route::view('/checkout', 'checkout')->name('checkout');
 
-Route::view('/product', 'product')->name('product');
-
 Route::get('/dashboard', [AdminController::class,'dashboard'])->name('dashboard');
 
 Route::get('/orders', [AdminController::class,'orders'])->name('orders');
@@ -41,7 +37,15 @@ Route::get('/create', [AdminController::class,'create'])->name('create');
 
 Route::get('/items', [AdminController::class,'items'])->name('items');
 
+Route::get('/products', [ProductController::class,'all'])->name('products');
+
+Route::get('/product/{productId}', [ProductController::class,'show'])->name('product/{product}');
+
 Route::post('/product/create', [ProductController::class,'create'])->name('stock');
+
+Route::get('/product/edit/{product}', [ProductController::class,'edit'])->name('product/edit/{product}');
+
+Route::post('/product/edit/{product}', [ProductController::class,'edit'])->name('product/edit/{product}');
 
 Route::get('order/{order}', [OrderController::class, 'order']);
 
