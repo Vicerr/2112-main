@@ -1,82 +1,77 @@
 <x-layout>
+  @push('title')| {{ $product->name }} @endpush
   <main class="container">
     <section class="item--container">
       <div class="item--product-details">
         <div class="item--image-container">
           <!-- product images -->
-          <img src="{{ asset('images/img-8365-6680864097911.webp') }}" alt="">
-          <img src="{{ asset('images/img-8366-6680864396c7f.webp') }}" alt="">
-          <img src="{{ asset('images/img-8366-6680864396c7f.webp') }}" alt="">
-          <img src="{{ asset('images/img-8367-6680864396df8.webp') }}" alt="">
+          <img src="{{ asset($product->images[0]->path) }}" alt="">
+          <img src="{{ asset($product->images[1]->path) }}" alt="">
+          <img src="{{ asset($product->images[2]->path) }}" alt="">
+          <img src="{{ asset($product->images[3]->path) }}" alt="">
 
-          <img class="wide" src="{{ asset('images/img-8366-6680864396c7f.webp') }}" alt="">
+          <img class="wide" src="{{ asset($product->images[4]->path) }}" alt="">
         </div>
         <div class="item--misc">
           <div class="item--details">
             <!-- product name  -->
-            <p class="item--name">Product name</p>
+            <p class="item--name">{{ $product->name }}</p>
+            <!-- product description  -->
+            <p class="item--price">
+              <span class="item-title">Description</span>
+              <p>{{ $product->desc }}</p>
+            </p>
             <div class="item--size" id="custom-select">
               <!-- submit size based on what the client picks  -->
               <p class="item-title">Size: </p>
               <div>
                 <button class="select-btn">XS</button>
                 <button class="select-btn">S</button>
-                <button aria-current="true" class="select-btn">M</button>
+                <button class="select-btn">M</button>
                 <button class="select-btn">L</button>
-                <button class="select-btn">XL</button>
+                <button aria-current="true" class="select-btn">XL</button>
               </div>
             </div>
             <!-- product price  -->
             <p class="item--price">
               <span class="item-title">Price</span>
-              <span>&#x20a6 4000</span>
+              <span>&#x20a6 {{ number_format($product->price) }}</span>
             </p>
-            <!-- product code  -->
-            <div class="colors">
+            <!-- product color  -->
+            <div class="item--price">
               <p class="item-title">Color</p>
               <!-- put color in data attribute to change the color  -->
-              <p class="item-color" data-color="blue"></p>
+              <div style="display: flex; align-items: center;">
+                {{ ucfirst(strtolower($product->color)) }}
+                <span style="margin-left:10px; display: inline-block; padding: 1rem 1rem; border-radius: 0.25rem; background-color: {{strtolower($product->color)}}; font-weight: bold; text-decoration: none;"></span>
+            </div>
             </div>
           </div>
-          <form action="" class="item--actions" id="productOrderForm">
-            <div class="item--colors">
-              <!-- product color  -->
-
-            </div>
-
-            <input type="hidden" name="select-value" value="M" id="select">
+          <div class="item--actions">
             <p class="item-title">Quantity</p>
             <div class="item--order-actions">
-              <div>
-                <div class="order-count">
-                  <button class="decrement" id="decrement"> - </button>
-                  <!-- select quantity based on what the user chooses  -->
-                  <span class="display-order-count" id="display-order-count">1</span>
-                  <input type="text" hidden value="1" name="order-number" style="display: none;" id="order-number">
-                  <button class="increment" id="increment">+</button>
-                </div>
-
-              </div>
-
+                <div>
+                    <div class="order-count">
+                        <button class="decrement" id="decrement"> - </button>
+                        <span class="display-order-count" id="display-order-count">1</span>
+                        <button class="increment" id="increment">+</button>
+                      </div>
+                    </div>
             </div>
-
-
-          </form>
-          <form action="/orders/add-to-cart" method="post" class="item--actions" id="productOrderForm">
+          </div>
+          
+          <form action="/cart/add" method="post" class="item--actions" id="productOrderForm">
             <input type="hidden" name="size" value="M" id="select">
-            <input type="text" hidden value="1" name="quantity" class="order-number">
-            <input type="text" hidden value="<%= product.id %>" name="itemId">
-            <button class="invert" type="submit">Add to Cart </button>
-
-          </form>
-          <form action="/orders/place-order" method="post" class="item--actions" id="productOrderForm">
+            <input type="text" hidden value="1" name="quantity" style="display: none;" id="order-number">
+            <input type="text" hidden value="{{ $product->id }}" name="product_id">
+            <button type="submit">Add to Cart </button>
+          {{-- </form>
+          <form action="/billing" method="post" class="item--actions" id="productOrderForm">
             <input type="hidden" name="size" value="M" id="select">
-            <input type="text" hidden value="<%= product.id %>" name="itemId">
-
-            <input type="text" hidden value="1" name="quantity" class="order-number">
-            <button type="submit" onclick="submitProductOrderForm()">Buy Now</button>
-
-          </form>
+            <input type="text" hidden value="1" name="quantity" style="display: none;" id="order-number">
+            <input type="text" hidden value="{{ $product->id }}" name="product_id">
+            <button type="submit">Buy Now</button>
+          </form> --}}
         </div>
       </div>
       <!-- <dialog id="modal" class="modal">
@@ -101,48 +96,51 @@
         Related Products
       </h2>
       <div class="product--container">
-        <!-- filter products based on items with the same tag -->
-        <a href="./product.html" class="product--item">
-          <div class="product--image-container">
-            <img src="{{ asset('images/img-8337-6680861cdabff.webp') }}" loading="lazy" alt="">
-          </div>
-          <div class="product--item--description">
-            <p class="product--item--name">Shirt</p>
-            <p class="product--item--price">$400</p>
-          </div>
-        </a>
-
-        <a href="./product.html" class="product--item">
-          <div class="product--image-container">
-            <img src="{{ asset('images/img-8336-6680861d35809.webp') }}" loading="lazy" alt="">
-          </div>
-          <div class="product--item--description">
-            <p class="product--item--name">Shirt</p>
-            <p class="product--item--price">$400</p>
-          </div>
-        </a>
-
-
-        <a href="./product.html" class="product--item">
-          <div class="product--image-container">
-            <img src="{{ asset('images/img-8338-668086222d99d.webp') }}" loading="lazy" alt="">
-          </div>
-          <div class="product--item--description">
-            <p class="product--item--name">Shirt</p>
-            <p class="product--item--price">$400</p>
-          </div>
-        </a>
-
-        <a href="./product.html" class="product--item">
-          <div class="product--image-container">
-            <img src="{{ asset('images/img-8339-6680862dce627.webp') }}" loading="lazy" alt="">
-          </div>
-          <div class="product--item--description">
-            <p class="product--item--name">Shirt</p>
-            <p class="product--item--price">$400</p>
-          </div>
-        </a>
+        @foreach ($related_product as $related)
+          <a href="/product/{{ $related->id }}" class="product--item">
+            <div class="product--image-container">
+              <img src="{{ asset($related->images->first()->path) }}" loading="lazy" alt="">
+            </div>
+            <div class="product--item--description">
+              <p class="product--item--name">{{ $related->name }}</p>
+              <p class="product--item--price">&#x20a6 {{ number_format($related->price) }}</p>
+            </div>
+          </a>
+        @endforeach
       </div>
     </section>
   </main>
+  @push('script')
+  <script>
+      const decrementButton = document.getElementById('decrement');
+      const incrementButton = document.getElementById('increment');
+      const displayOrderCount = document.getElementById('display-order-count');
+      const orderNumberInput = document.getElementById('order-number');
+
+      decrementButton.addEventListener('click', () => {
+          const currentCount = parseInt(displayOrderCount.textContent);
+          if (currentCount > 1) {
+              displayOrderCount.textContent = currentCount - 1;
+              orderNumberInput.value = currentCount - 1;
+          }
+      });
+
+      incrementButton.addEventListener('click', () => {
+          const currentCount = parseInt(displayOrderCount.textContent);
+          displayOrderCount.textContent = currentCount + 1;
+          orderNumberInput.value = currentCount + 1;
+      });
+
+      const selectBtn = document.querySelectorAll('.select-btn');
+      const selectedSizeInput = document.getElementById('selectedSize');
+
+      selectBtn.forEach(btn => {
+          btn.addEventListener('click', () => {
+              selectBtn.forEach(btn => btn.removeAttribute('aria-current'));
+              btn.setAttribute('aria-current', 'true');
+              selectedSizeInput.value = btn.textContent;
+          });
+      });
+    </script>
+  @endpush
 </x-layout>
