@@ -149,55 +149,50 @@
       <div class="container">
         <div class="page-inner">
           <div class="row">
-            <div class="col-md-12">
               <x-flash-message />
               <x-error-message /> 
               <div class="card">
                 <div class="card-header" style="display: flex; justify-content: space-between; ">
                   <h4 class="card-title">Products List</h4>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dropdown">
-                          <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                              Sort By
-                          </button>
-                          @php
-                           if (count(request()->query()) > 0) {
-                            $array = request()->query();
-                            unset($array['sort']);
-                            $message = "&".http_build_query($array);
-                           } else {
-                            $message = "";
-                           }  
-                          @endphp
-                          <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
-                              <li class="border-bottom px-2">
-                                <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Newest date first</a>
-                              </li>
-                              <li class="border-bottom p-2">
-                                <a class="dropdown-item" href="/items?sort=date-asc?{{ $message }}">Oldest date first</a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=name-desc{{ $message }}">Name A &RightArrow; Z </a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=name-asc{{ $message }}">Name Z &RightArrow; A</a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=price-desc{{ $message }}">Lowest price first</a>
-                              </li>
-                              <li class="pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=price-asc{{ $message }}">Highest price first</a>
-                              </li>
-                          </ul>
-                        </div>
+                  <div class="d-flex">
+                      <div class="dropdown">
+                        <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sort By
+                        </button>
+                        @php
+                         if (count(request()->query()) > 0) {
+                          $array = request()->query();
+                          unset($array['sort']);
+                          $message = "&".http_build_query($array);
+                         } else {
+                          $message = "";
+                         }  
+                        @endphp
+                        <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
+                            <li class="border-bottom px-2">
+                              <a class="dropdown-item" href="/items?sort=date-asc{{ $message }}">Newest date first</a>
+                            </li>
+                            <li class="border-bottom p-2">
+                              <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Oldest date first</a>
+                            </li>
+                            <li class="border-bottom pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=name-asc{{ $message }}">Name A &RightArrow; Z </a>
+                            </li>
+                            <li class="border-bottom pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=name-desc{{ $message }}">Name Z &RightArrow; A</a>
+                            </li>
+                            <li class="border-bottom pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=price-asc{{ $message }}">Lowest price first</a>
+                            </li>
+                            <li class="pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=price-desc{{ $message }}">Highest price first</a>
+                            </li>
+                        </ul>
                       </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
                       <div>
                         <form action="{{ route('items') }}" method="get">
                           <div class="input-group">
-                            <input name="search" type="text" class="form-control" placeholder="Search product name or tag" aria-label="Search">
+                            <input name="search" type="text" class="flex-md-grow-1  form-control" placeholder="Search product name or tag" aria-label="Search">
                             <div class="input-group-append">
                               <button class="btn btn-label-info btn-outline-secondary" type="submit">Search</button>
                             </div>
@@ -230,7 +225,7 @@
                           <!-- <td><%= item._id %> </td> -->
                           <td>{{ $product->name }}</td>
                           <td>{{ $product->color }}</td>
-                          <td>{{ $product->price }}</td>
+                          <td>&#x20a6 {{ number_format($product->price) }}</td>
                           <td{{ $product->tag }}</td>
                           <td>
                             <div class="dropdown">
@@ -242,7 +237,7 @@
                                   <a class="dropdown-item" href="/product/{{ $product->id }}"> View Product </a>
                                 </li>
                                 <li class="border-bottom p-2">
-                                  <a class="dropdown-item" href="/edit/{{ $product->id }}">Edit Product</a>
+                                  <a class="dropdown-item" href="/product/edit/{{ $product->id }}">Edit Product</a>
                                 </li>
                                 <li class="pt-2 px-2">
                                   <form action="/product/cancel/{{ $product->id }}" method="DELETE" class="dropdown-item">
