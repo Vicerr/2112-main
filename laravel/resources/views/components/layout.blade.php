@@ -22,7 +22,7 @@
   <nav class="navigation">
     <div class="wrapper container">
       <div class="breakout">
-        <div class="logo-container"><img src="{{asset('images/logo.png')}}" alt=""></div>
+        <div class="logo-container"><a href="{{ route("home") }}"><img src="{{asset('images/logo.png')}}" alt=""></a></div>
         <div class="nav-misc" data-navigation-status="closed" id="nav-misc">
           <button id="close-navigation" onclick="toggleNav()">
             <div class="cross"></div>
