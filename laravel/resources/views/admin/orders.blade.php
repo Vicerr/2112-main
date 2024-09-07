@@ -157,18 +157,34 @@
                     <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Filter
                     </button>
+                    @php
+                      if (count(request()->query()) > 0 && empty(request()->input('sort'))) {
+                        $array = request()->query();
+                        unset($array['sort']);
+                        $message = "&".http_build_query($array);
+                      } elseif (count(request()->query()) > 1 && !empty(request()->input('sort'))) {
+                        $array = request()->query();
+                        unset($array['sort']);
+                        $message = "&".http_build_query($array);
+                      } elseif (count(request()->query()) == 1 && !empty(request()->input('sort'))) {
+                        unset($array['sort']);
+                        $message = "";
+                      } else {
+                        $message = "";
+                      }  
+                    @endphp
                     <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
                         <li class="border-bottom px-2">
-                          <a class="dropdown-item" href="/orders?filter=all">Show All</a>
+                          <a class="dropdown-item" href="/orders?filter=all{{ $message }}">Show All</a>
                         </li>
                         <li class="border-bottom p-2">
-                          <a class="dropdown-item" href="/orders?filter=pending">Show Pending</a>
+                          <a class="dropdown-item" href="/orders?filter=pending{{ $message }}">Show Pending</a>
                         </li>
                         <li class="border-bottom pt-2 px-2">
-                          <a class="dropdown-item" href="/orders?filter=delivered">Show Delivered</a>
+                          <a class="dropdown-item" href="/orders?filter=delivered{{ $message }}">Show Delivered</a>
                         </li>
                         <li class="pt-2 px-2">
-                          <a class="dropdown-item" href="/orders?filter=cancelled">Show Cancelled</a>
+                          <a class="dropdown-item" href="/orders?filter=cancelled{{ $message }}">Show Cancelled</a>
                         </li>
                     </ul>
                   </div>
