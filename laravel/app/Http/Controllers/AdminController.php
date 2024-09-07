@@ -55,7 +55,7 @@ class AdminController extends Controller
             $products = $query->paginate(6);
 
         } elseif (!empty($data) && $data === 'price-asc') {
-            $query = Products::orderBy('name', 'desc')->filter(request(['search']));
+            $query = Products::orderBy('price', 'asc')->filter(request(['search']));
             $products = $query->paginate(6);
 
         } else {
