@@ -47,4 +47,92 @@ class ProductController extends Controller
         $request->session()->regenerate();
         return redirect()->route('dashboard')->with('message', 'Product created successfully!');
     }
+
+    public function show(Request $request)
+    {
+        $product_id = $request->route('productId'); 
+        $product = Products::where('id', $product_id)->with('images')->first();
+        if (!$product) {
+            // Product doesn't exist, redirect back with a flash message
+            return redirect()->route('products')->with('error', 'Product not found.');
+        }
+
+        $query = Products::orderBy('created_at','desc')
+            ->where('tag', $product->tag)
+            ->whereNotIn('id', [$product->id])
+            ->take(4)
+            ->with('images');
+        $related = $query->get();
+        return view('product', ['product' => $product, 'related_product' => $related]);
+    }
+
+    public function all(Request $request)
+    {   
+        $latest_query = Products::orderBy('created_at','desc')
+            ->take(4)
+            ->with('images');
+        $latest = $latest_query->get();
+        // dd($latest_query->pluck('id'));
+        $data = $request->input('sort');
+
+        if (!empty($data) && $data === 'date-desc') {
+            $all_query = Products::orderBy('created_at', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'date-asc') {
+            $all_query = Products::orderBy('created_at', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'name-desc') {
+            $all_query = Products::orderBy('name', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'name-asc') {
+            $all_query = Products::orderBy('name', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'price-desc') {
+            $all_query = Products::orderBy('price', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'price-asc') {
+            $all_query = Products::orderBy('price', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } else {
+            $all_query = Products::orderBy('id', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+        }
+
+        $tags  = Products::distinct()->pluck('tag');
+        return view('products', ['latest_product' => $latest, 'all_products' => $products, 'tags' => $tags]);
+    }
 }
