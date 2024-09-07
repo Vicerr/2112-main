@@ -160,13 +160,20 @@
                             Sort By
                         </button>
                         @php
-                         if (count(request()->query()) > 0) {
-                          $array = request()->query();
-                          unset($array['sort']);
-                          $message = "&".http_build_query($array);
-                         } else {
-                          $message = "";
-                         }  
+                          if (count(request()->query()) > 0 && empty(request()->input('sort'))) {
+                            $array = request()->query();
+                            unset($array['sort']);
+                            $message = "&".http_build_query($array);
+                          } elseif (count(request()->query()) > 1 && !empty(request()->input('sort'))) {
+                            $array = request()->query();
+                            unset($array['sort']);
+                            $message = "&".http_build_query($array);
+                          } elseif (count(request()->query()) == 1 && !empty(request()->input('sort'))) {
+                            unset($array['sort']);
+                            $message = "";
+                          } else {
+                            $message = "";
+                          }
                         @endphp
                         <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
                             <li class="border-bottom px-2">
