@@ -41,11 +41,11 @@ Route::get('/products', [ProductController::class,'all'])->name('products');
 
 Route::get('/product/{productId}', [ProductController::class,'show'])->name('product/{product}');
 
-Route::post('/product/create', [ProductController::class,'create'])->name('stock');
+Route::post('/product/create', [ProductController::class,'create'])->name('product/create');
 
-Route::get('/product/edit/{product}', [ProductController::class,'edit'])->name('product/edit/{product}');
+Route::get('/product/edit/{productId}', [ProductController::class,'edit'])->name('product/edit/{product}');
 
-Route::post('/product/edit/{product}', [ProductController::class,'edit'])->name('product/edit/{product}');
+Route::post('/product/edit', [ProductController::class,'update'])->name('product/edit');
 
 Route::get('order/{order}', [OrderController::class, 'order']);
 
