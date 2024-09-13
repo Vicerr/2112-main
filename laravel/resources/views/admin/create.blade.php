@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Dashboard</title>
+  <title>Product Generator</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="{{ asset('images/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
@@ -154,6 +154,7 @@
               <x-flash-message />
               <x-error-message /> 
               <form class="card" id="upload-form" method="post" action="/product/create" enctype="multipart/form-data">
+                @csrf
                 <div class="card-header">
                   <div class="card-title">Create Item</div>
                 </div>
@@ -168,7 +169,7 @@
                         @enderror
                       </div>
                       <div class="form-group">
-                        <label for="product-price">Product Price</label>
+                        <label for="product-price">Product Price (&#x20a6) </label>
                         <input pattern="\d+" title="must be a positive number" type="number" min="1" class="form-control" name="price" required value="{{ old('price') }}" placeholder="Product Price" />
                         @error('price')
                           <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
@@ -176,7 +177,7 @@
                       </div>
                       <div class="form-group">
                         <label for="product-price">Product Description</label>
-                        <textarea type="textarea" class="form-control" name="desc" value="{{ old('desc') }}" required placeholder="Product Description"></textarea>
+                        <textarea type="textarea" class="form-control" name="desc" required placeholder="Product Description">{{ old('desc') }}</textarea>
                         @error('desc')
                           <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
                         @enderror
@@ -252,7 +253,7 @@
 
   <!-- jQuery Scrollbar -->
   <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-
+  
   <!-- Chart JS
   <script src="/assets-dashboard/js/plugin/chart.js/chart.min.js"></script> -->
 
@@ -274,97 +275,6 @@
 
   <!-- Kaiadmin JS -->
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
-
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script>
-    $(document).ready(function() {
-      $("#basic-datatables").DataTable({});
-
-      $("#multi-filter-select").DataTable({
-        pageLength: 5,
-        initComplete: function() {
-          this.api()
-            .columns()
-            .every(function() {
-              var column = this;
-              var select = $(
-                  '<select class="form-select"><option value=""></option></select>'
-                )
-                .appendTo($(column.footer()).empty())
-                .on("change", function() {
-                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                  column
-                    .search(val ? "^" + val + "$" : "", true, false)
-                    .draw();
-                });
-
-              column
-                .data()
-                .unique()
-                .sort()
-                .each(function(d, j) {
-                  select.append(
-                    '<option value="' + d + '">' + d + "</option>"
-                  );
-                });
-            });
-        },
-      });
-
-      // Add Row
-      $("#add-row").DataTable({
-        pageLength: 5,
-      });
-
-      var action =
-        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-      $("#addRowButton").click(function() {
-        $("#add-row")
-          .dataTable()
-          .fnAddData([
-            $("#addName").val(),
-            $("#addPosition").val(),
-            $("#addOffice").val(),
-            action,
-          ]);
-        $("#addRowModal").modal("hide");
-      });
-    });
-    let uploadForm = document.getElementById("upload-form")
-    let uploadImages = document.getElementById("image-upload")
-    let errMessage = document.getElementById("img-err-text")
-
-    function validateFiles() {
-      let files = uploadImages.files
-      errMessage.textContent = ''
-      let isValid = true
-      if (files.length !== 5) {
-        errMessage.textContent = "Upload exactly 5 images"
-        uploadImages.value = ""
-        isValid = false
-      }
-      Array.from(files).forEach(file => {
-        if (file.size > 1 * 1024 * 1024) {
-          errMessage.textContent = `${file.name} is bigger than 1mb`
-          isValid = false
-        }
-
-      })
-
-      return isValid
-    }
-    uploadImages.addEventListener("change", validateFiles)
-    uploadForm.addEventListener("submit", function(e) {
-      let valid = validateFiles()
-      if (!valid) {
-        e.preventDefault()
-      }
-    })
-    console.log(isValid)
-  </script>
-
 </body>
 
 </html>
