@@ -4,17 +4,18 @@
 
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>21/12 | Products</title>
+  <title>Product Editor</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
   <link rel="icon" href="{{ asset('images/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
   <!-- Fonts and icons -->
   <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
-  
+
   <!-- CSS Files -->
-  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/image-uploader.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/flash-message.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}" />
 
@@ -152,165 +153,108 @@
             <div class="col-md-12">
               <x-flash-message />
               <x-error-message /> 
-              <div class="card">
-                <div class="card-header" style="display: flex; justify-content: space-between; ">
-                  <h4 class="card-title">Products List</h4>
+              <form class="card" id="upload-form" method="post" action="/product/edit" enctype="multipart/form-data">
+                @csrf
+                  <div class="card-header">
+                  <div class="card-title">Create Item</div>
+                </div>
+                <div class="card-body">
                   <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dropdown">
-                          <button class="btn btn-label-info btn-round me-2 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                              Sort By
-                          </button>
-                          @php
-                           if (count(request()->query()) > 0) {
-                            $array = request()->query();
-                            unset($array['sort']);
-                            $message = "&".http_build_query($array);
-                           } else {
-                            $message = "";
-                           }  
-                          @endphp
-                          <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
-                              <li class="border-bottom px-2">
-                                <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Newest date first</a>
-                              </li>
-                              <li class="border-bottom p-2">
-                                <a class="dropdown-item" href="/items?sort=date-asc?{{ $message }}">Oldest date first</a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=name-desc{{ $message }}">Name A &RightArrow; Z </a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=name-asc{{ $message }}">Name Z &RightArrow; A</a>
-                              </li>
-                              <li class="border-bottom pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=price-desc{{ $message }}">Lowest price first</a>
-                              </li>
-                              <li class="pt-2 px-2">
-                                <a class="dropdown-item" href="/items?sort=price-asc{{ $message }}">Highest price first</a>
-                              </li>
-                          </ul>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" class="form-control" name="name" required value="{{ $product->name }}" placeholder="Product Name" />
+                        @error('name')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
+                      </div>
+                      <div class="form-group">
+                        <label for="product-price">Product Price (&#x20a6) </label>
+                        <input pattern="\d+" title="must be a positive number" type="number" min="1" class="form-control" name="price" required value="{{ $product->price }}" placeholder="Product Price" />
+                        @error('price')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
+                      </div>
+                      <div class="form-group">
+                        <label for="product-price">Product Description</label>
+                        <textarea type="textarea" class="form-control" name="desc" required placeholder="Product Description">{{ $product->desc }}</textarea>
+                        @error('desc')
+                          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row ">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="tag">Tag</label>
+                            <input type="text" required class="form-control" id="text" name="tag" value="{{ $product->tag }}" placeholder="Tag" />
+                            @error('tag')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
+                          </div>
+                        </div>
+
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="color">Color</label>
+                            <input type="text" required name="color" class="form-control" value="{{ $product->color }}" placeholder="Enter Valid Color Name" />
+                            @error('color')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label for="password">Re-upload 5 Images</label>
+                            <div id="app"></div>
+                            <input type="file" id="fileInput" multiple name="file[]" hidden value="{{ old('file') }}" />
+                            @error('file')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
+                            <div class="uploader" id="fileSelect">
+                              <div id="content" class="content">
+                                <p id="content-action">
+                                </p>
+                              </div>
+                            </div>
+                            <div id="oit" class="other-image-thumbnails"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-6">
-                      <div>
-                        <form action="{{ route('items') }}" method="get">
-                          <div class="input-group">
-                            <input name="search" type="text" class="form-control" placeholder="Search product name or tag" aria-label="Search">
-                            <div class="input-group-append">
-                              <button class="btn btn-label-info btn-outline-secondary" type="submit">Search</button>
-                            </div>
-                          </div> 
-                        </form>
-                      </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="display table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>Date Created</th>
-                          <!-- <th>ID</th> -->
-                          <th>Product Name</th>
-                          <th>Color</th>
-                          <th>Price</th>
-                          <th>Tag</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @foreach ($products as $product)
-                        <tr>
-                          <td>
-                            {{ $product->created_at->format('M d, Y') }}
-                            <br>
-                            {{ $product->created_at->format('h:i A') }}
-                          </td>
-                          <!-- <td><%= item._id %> </td> -->
-                          <td>{{ $product->name }}</td>
-                          <td>{{ $product->color }}</td>
-                          <td>{{ $product->price }}</td>
-                          <td{{ $product->tag }}</td>
-                          <td>
-                            <div class="dropdown">
-                              <button class="btn btn-label-info btn-round dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Action
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
-                                <li class="border-bottom pb-2 px-2">
-                                  <a class="dropdown-item" href="/product/{{ $product->id }}"> View Product </a>
-                                </li>
-                                <li class="border-bottom p-2">
-                                  <a class="dropdown-item" href="/edit/{{ $product->id }}">Edit Product</a>
-                                </li>
-                                <li class="pt-2 px-2">
-                                  <form action="/product/cancel/{{ $product->id }}" method="DELETE" class="dropdown-item">
-                                    @csrf
-                                      <button type="submit" style="all:unset;">Delete Product</button>
-                                  </form>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
-                    <div class="pagination__container">{{ $products->appends(request()->except('page'))->links('pagination::default') }}</div>
                   </div>
                 </div>
-              </div>
+                <div class="card-action">
+                  <button type="submit" class="btn btn-success submit-add-item">Edit</button>
+                  <button type="reset" class="btn btn-danger">Cancel</button>
+                </div>
+              </form>
+
             </div>
-
-
           </div>
         </div>
       </div>
-      <script>
-        function triggerDeleteBtn() {
-          let confirmDeletion = confirm("Are you sure you want to delete all products from database?")
-          if (confirmDeletion) {
-            document.getElementById('deleteAll').click()
-          }
-        }
-      </script>
+    </div>
+  </div>
   <!-- Custom template | don't include it in your project! -->
 
   <!-- End Custom template -->
   <!--   Core JS Files   -->
   <script language="JavaScript" type="text/javascript" src="http://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/f71a44a4e4.js" crossorigin="anonymous"></script>
-  
+
   <!-- JAVASCRIPT FILES -->
   <script language="JavaScript" type="text/javascript" src="{{asset('js/main.js')}}"></script>
+  <script type="module" src="{{ asset('js/imageUploader.js')}}"></script>
   <script src="{{ asset('js/core/popper.min.js') }}"></script>
   <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
 
   <!-- jQuery Scrollbar -->
   <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-
-  <!-- Chart JS
-  <script src="/assets-dashboard/js/plugin/chart.js/chart.min.js"></script> -->
-
-  <!-- jQuery Sparkline
-  <script src="/assets-dashboard/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script> -->
-
-  <!-- Datatables -->
-  <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
-
-  <!-- Bootstrap Notify
-  <script src="/assets-dashboard/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script> -->
-
-  <!-- jQuery Vector Maps
-  <script src="/assets-dashboard/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-  <script src="/assets-dashboard/js/plugin/jsvectormap/world.js"></script> -->
-
-  <!-- Sweet Alert
-  <script src="/assets-dashboard/js/plugin/sweetalert/sweetalert.min.js"></script> -->
-
-  <!-- Kaiadmin JS -->
-  <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
 </body>
 
 </html>

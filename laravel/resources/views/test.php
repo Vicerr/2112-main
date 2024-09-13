@@ -1,0 +1,214 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Models\Images;
+use App\Rules\ColorValidationRule;
+use App\Models\Products;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
+const CSS_COLOR_KEYWORDS = [
+    "aliceblue","antiquewhite","aqua","aquamarine","azure","beige","bisque","black","blanchedalmond","blue","blueviolet","brown","burlywood","cadetblue","chartreuse","chocolate","coral","cornflowerblue","cornsilk","crimson","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkgrey","darkkhaki","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","grey","green","greenyellow","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey",
+    "lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen",
+];
+class ProductController extends Controller
+{
+
+    public function create(Request $request)
+    {
+        $cssColorKeywords = CSS_COLOR_KEYWORDS;
+        // Validate the request data
+        $formFields = $request->validate([
+            'name' => ['required', 'string', 'max:255',],
+            'price' => ['required', 'numeric', 'min:0',],
+            'desc' => ['required', 'string', 'max:1024',],
+            'tag' =>  ['required', 'string', 'max:255',],
+            'color' => ['required', 'string', 'max:255', new ColorValidationRule($cssColorKeywords),],
+            'file' => ['required', 'array', 'size:5',],
+            'file.*' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048',], // Adjust max size as needed
+        ]);
+
+        // Create a new product
+        $product_id = Products::create([
+            'name' => $formFields['name'],
+            'price' => strval($formFields['price']),
+            'desc' => $formFields['desc'],
+            'tag' => strtoupper($formFields['tag']),
+            'color' => strtoupper($formFields['color'])
+        ])->product_id;
+        
+        
+        // Upload images and associate with the product
+        foreach ($request->file('file') as $image) {
+            $imageName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/products/' . $product_id, $imageName);
+
+            // Create a new image record in the images table
+            Images::create([
+                'product_id' => $product_id,
+                'path' => 'public/products/' . $product_id . '/' . $imageName,
+            ]);
+        }
+
+        // Redirect to a success page or view
+        $request->session()->regenerate();
+        return redirect()->route('dashboard')->with('message', 'Product created successfully!');
+    }
+
+    public function show(Request $request)
+    {
+        $product_id = $request->route('productId'); 
+        $product = Products::where('id', $product_id)->with('images')->first();
+        if (!$product) {
+            // Product doesn't exist, redirect back with a flash message
+            return redirect()->route('products')->with('error', 'Product not found.');
+        }
+
+        $query = Products::orderBy('created_at','desc')
+            ->where('tag', $product->tag)
+            ->whereNotIn('id', [$product->id])
+            ->take(4)
+            ->with('images');
+        $related = $query->get();
+        return view('product', ['product' => $product, 'related_product' => $related]);
+    }
+
+    public function all(Request $request)
+    {   
+        $latest_query = Products::orderBy('created_at','desc')
+            ->take(4)
+            ->with('images');
+        $latest = $latest_query->get();
+        // dd($latest_query->pluck('id'));
+        $data = $request->input('sort');
+
+        if (!empty($data) && $data === 'date-desc') {
+            $all_query = Products::orderBy('created_at', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'date-asc') {
+            $all_query = Products::orderBy('created_at', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'name-desc') {
+            $all_query = Products::orderBy('name', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'name-asc') {
+            $all_query = Products::orderBy('name', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'price-desc') {
+            $all_query = Products::orderBy('price', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } elseif (!empty($data) && $data === 'price-asc') {
+            $all_query = Products::orderBy('price', 'asc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+
+        } else {
+            $all_query = Products::orderBy('id', 'desc')
+            ->whereNotIn('id', $latest_query->pluck('id'))
+            ->with('images')
+            ->filter(request(['search']))
+            ->filter(request(['tag']));
+            $products = $all_query->paginate(8);
+        }
+
+        $tags  = Products::distinct()->pluck('tag');
+        return view('products', ['latest_product' => $latest, 'all_products' => $products, 'tags' => $tags]);
+    }
+
+    public function edit(Request $request) {
+        $product_id = $request->route('productId'); 
+        $product = Products::where('id', $product_id)->with('images')->first();
+        return view('admin.edit', ['product' => $product]);
+    }
+
+    public function update(Request $request)  {
+        // Find the product to be edited
+        $cssColorKeywords = CSS_COLOR_KEYWORDS;
+        $product_id = $request->input('product_id');
+        $product = Products::where('id', $product_id)->first();
+
+        $cssColorKeywords = array_map('strtolower', $cssColorKeywords);
+
+        // Validate the request data
+        if ($formFields = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'desc' => 'required|string|max:1024',
+            'tag' => 'required|string|max:255',
+            'color' => ['required', 'string', 'max:255', new ColorValidationRule($cssColorKeywords)],
+            'file' => 'required|array|size:5',
+            'file.*' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust max size as needed
+        ])) {
+            dd($formFields);
+        } else {
+            dd('Something is wrong');
+        }
+         
+        
+        dd($formFields);
+        // Update the product
+        $product->update($formFields);
+
+        $images_to_delete = $product->images;
+        // Delete all stored product images
+        foreach ($images_to_delete as $image) {
+            $path = 'app/'.$image->path;
+            $path = storage_path($path);
+            if (File::exists($path)) {
+                File::delete($path);
+            } else {
+                return back()->with('error', 'Error uploading images.');           
+            }
+        }
+
+        // Delete all product images from db
+        $product->images()->delete();
+        
+        // Upload new images and associate with the product
+        foreach ($request->file('file') as $image) {
+            $imageName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/products/' . $product_id, $imageName);
+            
+            // Create a new image record in the images table
+            Images::create([
+                'product_id' => $product_id,
+                'path' => 'public/products/' . $product_id . '/' . $imageName,
+            ]);
+        }
+        
+
+        return redirect()->route('dashboard')->with('message', 'Product updated successfully!');
+    }
+
+}
