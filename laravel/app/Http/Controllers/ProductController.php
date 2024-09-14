@@ -28,7 +28,7 @@ class ProductController extends Controller
             'tag' =>  ['required', 'string', 'max:255',],
             'color' => ['required', 'string', 'max:255', new ColorValidationRule($cssColorKeywords),],
             'file' => ['required', 'array', 'size:5',],
-            'file.*' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048',], // Adjust max size as needed
+            'file.*' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:25600',], // Adjust max size as needed
         ]);
 
         // Create a new product
@@ -38,7 +38,7 @@ class ProductController extends Controller
             'desc' => $formFields['desc'],
             'tag' => strtoupper($formFields['tag']),
             'color' => strtoupper($formFields['color'])
-        ])->product_id;
+        ])->id;
         
         
         // Upload images and associate with the product
@@ -79,6 +79,7 @@ class ProductController extends Controller
     public function all(Request $request)
     {   
         $latest_query = Products::orderBy('created_at','desc')
+            ->where('stock','available')
             ->take(4)
             ->with('images');
         $latest = $latest_query->get();
@@ -87,6 +88,7 @@ class ProductController extends Controller
 
         if (!empty($data) && $data === 'date-desc') {
             $all_query = Products::orderBy('created_at', 'desc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -95,6 +97,7 @@ class ProductController extends Controller
 
         } elseif (!empty($data) && $data === 'date-asc') {
             $all_query = Products::orderBy('created_at', 'asc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -103,6 +106,7 @@ class ProductController extends Controller
 
         } elseif (!empty($data) && $data === 'name-desc') {
             $all_query = Products::orderBy('name', 'desc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -111,6 +115,7 @@ class ProductController extends Controller
 
         } elseif (!empty($data) && $data === 'name-asc') {
             $all_query = Products::orderBy('name', 'asc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -119,6 +124,7 @@ class ProductController extends Controller
 
         } elseif (!empty($data) && $data === 'price-desc') {
             $all_query = Products::orderBy('price', 'desc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -127,6 +133,7 @@ class ProductController extends Controller
 
         } elseif (!empty($data) && $data === 'price-asc') {
             $all_query = Products::orderBy('price', 'asc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -135,6 +142,7 @@ class ProductController extends Controller
 
         } else {
             $all_query = Products::orderBy('id', 'desc')
+            ->where('stock','available')
             ->whereNotIn('id', $latest_query->pluck('id'))
             ->with('images')
             ->filter(request(['search']))
@@ -157,20 +165,20 @@ class ProductController extends Controller
         $cssColorKeywords = CSS_COLOR_KEYWORDS;
         $product_id = $request->input('product_id');
         $product = Products::where('id', $product_id)->first();
-
         $cssColorKeywords = array_map('strtolower', $cssColorKeywords);
 
         // Validate the request data
+        $request->validate([
+            'file' => 'required|array|size:5',
+            'file.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:25600', // Adjust max size as needed
+        ]);
         $formFields = $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'desc' => 'required|string|max:1024',
             'tag' => 'required|string|max:255',
             'color' => ['required', 'string', 'max:255', new ColorValidationRule($cssColorKeywords)],
-            'file' => 'required|array|size:5',
-            'file.*' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust max size as needed
         ]);
-        
         // Update the product
         $product->update($formFields);
 

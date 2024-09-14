@@ -58,6 +58,14 @@ class AdminController extends Controller
             $query = Products::orderBy('price', 'asc')->filter(request(['search']));
             $products = $query->paginate(6);
 
+        } elseif (!empty($data) && $data === 'available') {
+            $query = Products::orderBy('name', 'desc')->where('stock','available')->filter(request(['search']));
+            $products = $query->paginate(6);
+
+        } elseif (!empty($data) && $data === 'unavailable') {
+            $query = Products::orderBy('name', 'asc')->where('stock','unavailable')->filter(request(['search']));
+            $products = $query->paginate(6);
+
         } else {
             $query = Products::orderBy('id', 'desc')->filter(request(['search']));
             $products = $query->paginate(6);
