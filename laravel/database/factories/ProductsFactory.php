@@ -20,6 +20,7 @@ class ProductsFactory extends Factory
             'name' => $this->faker->word(),
             'desc' => $this->faker->sentence(),
             'color' => $this->faker->colorName(),
+            'stock' => $this->faker->randomElement(['unavailable', 'available']),
             'price' => $this->faker->numberBetween(1000, 999999),
             'tag' => $this->faker->randomElement(['ankara', 'lace', 'senator', 'shoe', 'suits', 'etibo', 'cashmire', 'hats']),
         ];
