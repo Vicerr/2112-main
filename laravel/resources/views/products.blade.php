@@ -31,6 +31,7 @@
             Sort By
         </button>
         @php
+          $array = [];  
           if (count(request()->query()) > 0 && empty(request()->input('sort'))) {
             $array = request()->query();
             unset($array['sort']);
@@ -48,10 +49,10 @@
         @endphp
         <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
             <li class="border-bottom px-2">
-              <a class="dropdown-item" href="/products?sort=date-asc{{ $message }}">Newest date first</a>
+              <a class="dropdown-item" href="/products?sort=date-asc{{ $message }}">Newest product first</a>
             </li>
             <li class="border-bottom p-2">
-              <a class="dropdown-item" href="/products?sort=date-desc{{ $message }}">Oldest date first</a>
+              <a class="dropdown-item" href="/products?sort=date-desc{{ $message }}">Oldest product first</a>
             </li>
             <li class="border-bottom pt-2 px-2">
               <a class="dropdown-item" href="/products?sort=name-asc{{ $message }}">Name A &RightArrow; Z </a>
@@ -86,6 +87,7 @@
         <div class="filter--wrapper" style="scroll-behavior: auto">
           <a class="filter--button" data-tag="all" aria-current="true" href="/products">All</a>
           @php
+            $array = [];
             if (count(request()->query()) > 0 && empty(request()->input('tag'))) {
               $array = request()->query();
               unset($array['tag']);
@@ -122,7 +124,6 @@
                 } else {
                   $image = '<img src="'.asset('images/logo.png').'" loading="lazy" alt="">';
                 }
-                
             @endphp
             {!! $image !!}
           </div>
@@ -144,7 +145,14 @@
       @foreach ($latest_product as $product)
         <a href="/product/{{ $product->id }}" class="product--item">
           <div class="product--image-container">
-            <img src="{{ asset($product->images->first()->path) }}" loading="lazy" alt="">
+            @php
+                if (!empty($product->images->first())) {
+                  $image = '<img src="'.asset($product->images->first()->path).'" style="object-fit: contain; border-radius:10px" loading="lazy" alt="'.$product->name.'">';
+                } else {
+                  $image = '<img src="'.asset('images/logo.png').'" loading="lazy" alt="">';
+                }
+            @endphp
+            {!! $image !!}
           </div>
           <div class="product--item--description">
             <p class="product--item--name">{{ $product->name }}</p>
