@@ -160,6 +160,7 @@
                             Sort By
                         </button>
                         @php
+                          $array = [];
                           if (count(request()->query()) > 0 && empty(request()->input('sort'))) {
                             $array = request()->query();
                             unset($array['sort']);
@@ -177,10 +178,10 @@
                         @endphp
                         <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
                             <li class="border-bottom px-2">
-                              <a class="dropdown-item" href="/items?sort=date-asc{{ $message }}">Newest date first</a>
+                              <a class="dropdown-item" href="/items?sort=date-asc{{ $message }}">Newest product first</a>
                             </li>
                             <li class="border-bottom p-2">
-                              <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Oldest date first</a>
+                              <a class="dropdown-item" href="/items?sort=date-desc{{ $message }}">Oldest product first</a>
                             </li>
                             <li class="border-bottom pt-2 px-2">
                               <a class="dropdown-item" href="/items?sort=name-asc{{ $message }}">Name A &RightArrow; Z </a>
@@ -193,6 +194,12 @@
                             </li>
                             <li class="pt-2 px-2">
                               <a class="dropdown-item" href="/items?sort=price-desc{{ $message }}">Highest price first</a>
+                            </li>
+                            <li class="pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=unavailable{{ $message }}">Products not in stock</a>
+                            </li>
+                            <li class="pt-2 px-2">
+                              <a class="dropdown-item" href="/items?sort=available{{ $message }}">Products in stock</a>
                             </li>
                         </ul>
                       </div>
@@ -219,6 +226,8 @@
                           <th>Color</th>
                           <th>Price</th>
                           <th>Tag</th>
+                          <th>Stock</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -233,7 +242,8 @@
                           <td>{{ $product->name }}</td>
                           <td>{{ $product->color }}</td>
                           <td>&#x20a6 {{ number_format($product->price) }}</td>
-                          <td{{ $product->tag }}</td>
+                          <td>{{ $product->tag }}</td>
+                          <td>{{ $product->stock }}</td>
                           <td>
                             <div class="dropdown">
                               <button class="btn btn-label-info btn-round dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
