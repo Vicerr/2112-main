@@ -215,6 +215,9 @@
                             @error('file')
                               <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
                             @enderror
+                            @error('file.*')
+                              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+                            @enderror
                             <div class="uploader" id="fileSelect">
                               <div id="content" class="content">
                                 <p id="content-action">
