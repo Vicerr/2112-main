@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('desc');
             $table->string('color');
+            $table->string('stock');
             $table->unsignedBigInteger('price');
             $table->string('tag');
             $table->timestamps();
