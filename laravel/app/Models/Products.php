@@ -9,7 +9,7 @@ class Products extends Model
 {
     public $table = 'products';
     use HasFactory;
-    protected $primaryKey = 'product_id';
+    protected $primaryKey = 'id';
 
     public function scopeFilter($query, array $filters) {
         if($filters['tag'] ?? false) {
