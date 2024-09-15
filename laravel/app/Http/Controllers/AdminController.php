@@ -13,7 +13,7 @@ class AdminController extends Controller
     public function dashboard() {
         $userCount = User::count();
         $productCount = Products::count();
-        $orderCount = Orders::where('status', 'delivered')->count();;
+        $orderCount = Orders::where('status', 'pending')->count();;
         $salesCount = Orders::where('status', 'delivered')->sum('total_price');
 
         $query = User::orderBy('created_at', 'desc')
