@@ -169,7 +169,7 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
-                        <p class="card-category">Productss</p>
+                        <p class="card-category">Products</p>
                         <h4 class="card-title">{{ $stat['productCount'] }}</h4>
                       </div>
                     </div>
@@ -226,7 +226,7 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
-                        <p class="card-category">Order</p>
+                        <p class="card-category">Orders</p>
                         <h4 class="card-title">{{ $stat['orderCount'] }}</h4>
                       </div>
                     </div>
