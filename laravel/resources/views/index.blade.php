@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout  :cart="$cart">
   @push('title')| Home @endpush
 <div class="container">
     <div class="hero--section ">
