@@ -40,16 +40,28 @@ Route::get('/items', [AdminController::class,'items'])->name('items');
 
 Route::get('/products', [ProductController::class,'all'])->name('products');
 
-Route::get('/product/{productId}', [ProductController::class,'show'])->name('product/{product}');
+Route::prefix('product')->name('product.')->group(function () {
+    
+    Route::delete('/cancel/{productId}', [ProductController::class,'cancel'])->name('cancel');
+    
+    Route::put('/stock/{productId}', [ProductController::class,'stock'])->name('stock');
+    
+    Route::post('/create', [ProductController::class,'create'])->name('create');
+    
+    Route::post('/edit', [ProductController::class,'update'])->name('edit');
+    
+    Route::get('/edit/{productId}', [ProductController::class,'edit'])->name('edit');
+    
+    Route::get('/{productId}', [ProductController::class,'show'])->name('show');
+    
+});
 
-Route::post('/product/create', [ProductController::class,'create'])->name('product/create');
+Route::prefix('product')->name('order.')->group(function () {
 
-Route::get('/product/edit/{productId}', [ProductController::class,'edit'])->name('product/edit/{product}');
+    Route::get('/{order}', [OrderController::class, 'order'])->name('order');
 
-Route::post('/product/edit', [ProductController::class,'update'])->name('product/edit');
+    Route::put('/deliver/{order}', [OrderController::class, 'deliver'])->name('deliver');
 
-Route::get('order/{order}', [OrderController::class, 'order']);
+    Route::delete('/cancel/{order}', [OrderController::class, 'cancel'])->name('cancel');
 
-Route::get('order/deliver/{order}', [OrderController::class, 'deliver']);
-
-Route::get('order/cancel/{order}', [OrderController::class, 'cancel']);
+});
