@@ -200,6 +200,7 @@
                           <!-- <th>Date Created</th> -->
                           <th>Username</th>
                           <th>Email</th>
+                          <th>Price</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -209,6 +210,7 @@
                         <tr>
                           <td>{{ $order->user->first_name.' '.$order->user->last_name }}</td>
                           <td> {{ $order->user->email }} </td>
+                          <td>&#x20a6 {{ number_format($order->total_price) }} </td>
                           <td> {{ $order->status }} </td>
                           <td>
                             <div class="dropdown">
@@ -217,13 +219,21 @@
                               </button>
                               <ul class="dropdown-menu dropdown-menu-lg" aria-labelledby="dropdownMenuButton1">
                                 <li class="border-bottom px-2">
-                                  <a class="dropdown-item" href="/order/deliver/{{ Crypt::encryptString($order->id) }}"> Mark as Delivered </a>
+                                  <form action="{{ route('order.deliver', ['order' => Crypt::encryptString($order->id)]) }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" style="all:unset;">Mark as Delivered </button>
+                                  </form>
                                 </li>
                                 <li class="border-bottom p-2">
-                                  <a class="dropdown-item" href="/order/{{ Crypt::encryptString($order->id) }}">View Order</a>
+                                  <a class="dropdown-item" href="{{ route('order.order', ['order' => Crypt::encryptString($order->id)]) }}">View Order</a>
                                 </li>
                                 <li class="pt-2 px-2">
-                                  <a class="dropdown-item" href="/order/cancel/{{ Crypt::encryptString($order->id) }}">Cancel Order</a>
+                                  <form action="{{ route('order.cancel', ['order' => Crypt::encryptString($order->id)]) }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="all:unset;">Cancel Order</button>
+                                  </form>
                                 </li>
                               </ul>
                             </div>
