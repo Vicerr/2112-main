@@ -3,6 +3,7 @@
     <div class="wrapper">
       <!-- submit clients address details if he chooses to order by delivery -->
       <form action="" class="billing-address" id="order-form">
+        @csrf
         <div class="form-group">
           <label for="information">Customer Information</label>
           <input type="text" name="email" id="">

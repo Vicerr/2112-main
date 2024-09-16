@@ -61,6 +61,7 @@
           </div>
           
           <form action="/cart/add" method="post" class="item--actions" id="productOrderForm">
+            @csrf
             <input type="hidden" name="size" value="M" id="select">
             <input type="text" hidden value="1" name="quantity" style="display: none;" id="order-number">
             <input type="text" hidden value="{{ $product->id }}" name="product_id">

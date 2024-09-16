@@ -25,6 +25,7 @@
             </div>
           </div>
           <form action="/orders/<%= item.item._id %>/delete?_method=DELETE" method="POST" class="delete-item-form">
+            @csrf
             <button type="submit" class="delete-item">x</button>
           </form>
         </div>
@@ -70,6 +71,7 @@
           <button style="padding: 0;" type="submit"><a style="display: block; text-decoration: none; color: white; padding-block: 1em;" href="/checkout" class="cart-btn">Checkout</a></button>
           <!-- </form> -->
           <form action="/orders/clear-orders" method="post" id="clear-orders-form">
+            @csrf
             <button type="submit" id="clear-orders-button" class="cart-btn">Clear Orders</button>
           </form>
         </div>

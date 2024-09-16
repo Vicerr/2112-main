@@ -70,6 +70,7 @@
       </div>
       <div>
         <form action="{{ route('products') }}" method="get">
+          @csrf
           <div class="input-group">
             <input name="search" type="text" class="flex-grow-1  form-control" placeholder="Search by name or tag" aria-label="Search">
             <div class="input-group-append">

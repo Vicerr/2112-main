@@ -7,7 +7,8 @@
       <div class="main-content">
         <h2>We would love to hear from you.</h2>
         <p class="text-secondary">If you have any query or any type of suggestion, you can contact us or send us a message here.</p>
-        <form action="" class=" contactform">
+        <form action="" class="contactform" method="POST">
+          @csrf
           <div class="form-group-wide">
             <div class="form-group">
               <label for="name">Name</label>
