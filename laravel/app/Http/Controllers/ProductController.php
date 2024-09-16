@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
+use auth;
 use App\Models\Images;
-use App\Rules\ColorValidationRule;
+use App\Models\Orders;
 use App\Models\Products;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Rules\ColorValidationRule;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -66,6 +68,14 @@ class ProductController extends Controller
             // Product doesn't exist, redirect back with a flash message
             return redirect()->route('products')->with('error', 'Product not found.');
         }
+        
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order = Orders::where('user_id', $user_id)->first();
+            $cart_count = count(json_decode($order->array_of_order_items));
+        } else {
+            $cart_count = '';
+        }
 
         $query = Products::orderBy('created_at','desc')
             ->where('tag', $product->tag)
@@ -73,7 +83,7 @@ class ProductController extends Controller
             ->take(4)
             ->with('images');
         $related = $query->get();
-        return view('product', ['product' => $product, 'related_product' => $related]);
+        return view('product', ['product' => $product, 'related_product' => $related, 'cart' => $cart_count]);
     }
 
     public function all(Request $request)
@@ -149,9 +159,16 @@ class ProductController extends Controller
             ->filter(request(['tag']));
             $products = $all_query->paginate(8);
         }
-
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order = Orders::where('user_id', $user_id)->first();
+            $cart_count = count(json_decode($order->array_of_order_items));
+        } else {
+            $cart_count = '';
+        }
+        
         $tags  = Products::distinct()->pluck('tag');
-        return view('products', ['latest_product' => $latest, 'all_products' => $products, 'tags' => $tags]);
+        return view('products', ['latest_product' => $latest, 'all_products' => $products, 'tags' => $tags, 'cart' => $cart_count]);
     }
 
     public function edit(Request $request) {
@@ -213,4 +230,50 @@ class ProductController extends Controller
         return redirect()->route('dashboard')->with('message', 'Product updated successfully!');
     }
 
+    public function cancel(Request $request) {
+        $product_id = $request->input('productId');
+        $product = Products::where('id', $product_id)->first();
+        if (!$product) {
+            // Article doesn't exist, redirect back with a flash message
+            return back()->with('error', 'Product not found.');
+        }
+
+        $images_to_delete = $product->images;
+        // Delete all stored product images
+        foreach ($images_to_delete as $image) {
+            $path = 'app/'.$image->path;
+            $path = storage_path($path);
+            if (File::exists($path)) {
+                File::delete($path);
+            } else {
+                return back()->with('error', 'Error uploading images.');           
+            }
+        }
+        // Delete all product images from db
+        $product->images()->delete();
+        // Delete Product
+        $product->delete();
+        return back()->with('message', 'Product successfuly deleted.');
+    }
+
+    public function stock(Request $request) {
+        $product_id = $request->route('productId');
+        $product = Products::where('id', $product_id)->first();
+        if (!$product) {
+            // Article doesn't exist, redirect back with a flash message
+            return back()->with('error', 'Product not found.');
+        }
+        if ($product->stock === 'available') {
+            // Update the stock
+            $product->update(['stock'=>'unavailable']);
+            return redirect()->route('items')->with('message', 'Product now unavailable!');
+        } elseif ($product->stock === 'unavailable') {
+            // Update the stock
+            $product->update(['stock'=>'available']);
+            return redirect()->route('items')->with('message', 'Product now available!');
+        } else {
+            return redirect()->route('items')->with('error', 'Something went wrong, please try again');
+        }
+        
+    }
 }
