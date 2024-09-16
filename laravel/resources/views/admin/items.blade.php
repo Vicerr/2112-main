@@ -205,6 +205,7 @@
                       </div>
                       <div>
                         <form action="{{ route('items') }}" method="get">
+                          @csrf
                           <div class="input-group">
                             <input name="search" type="text" class="flex-md-grow-1  form-control" placeholder="Search product name or tag" aria-label="Search">
                             <div class="input-group-append">
@@ -256,10 +257,24 @@
                                 <li class="border-bottom p-2">
                                   <a class="dropdown-item" href="/product/edit/{{ $product->id }}">Edit Product</a>
                                 </li>
-                                <li class="pt-2 px-2">
-                                  <form action="/product/cancel/{{ $product->id }}" method="DELETE" class="dropdown-item">
+                                <li class="border-bottom pt-2 px-2">
+                                  <form action="{{ route('product.stock', ['productId' => $product->id]) }}" method="POST" class="dropdown-item">
                                     @csrf
-                                      <button type="submit" style="all:unset;">Delete Product</button>
+                                    @method('PUT')
+                                    <button type="submit" style="all:unset;">
+                                      @if ($product->stock === 'available')
+                                        Mark as unavailable
+                                      @else
+                                        Mark as available
+                                      @endif
+                                    </button>
+                                  </form>
+                                </li>
+                                <li class="pt-2 px-2">
+                                  <form action="{{ route('product.cancel', ['productId' => $product->id]) }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="all:unset;">Delete Product</button>
                                   </form>
                                 </li>
                               </ul>
