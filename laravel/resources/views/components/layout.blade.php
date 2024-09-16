@@ -1,3 +1,4 @@
+@props(['cart'])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -53,7 +54,7 @@
           <div class="actions">
             {{-- <a href="{{ route('cart') }}" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt="Saved Items"></a> --}}
             @if (auth()->check())
-                {{-- <x-cart-icon :cart="$cart"></x-cart-icon> --}}
+                <x-cart-icon :cart="$cart" />
             @else
               <a href="{{ route('login') }}" class="icon"><img src="{{ asset('images/icons/envelope.svg') }}" alt="Cart"></a>
             @endif
