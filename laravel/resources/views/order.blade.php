@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :cart="$cart">
     @push('title')| Order @endpush
     @push('style')
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />

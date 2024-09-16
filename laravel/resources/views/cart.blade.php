@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :cart="$cart">
   <main class="container">
     <div class="wrapper">
       <section class="cart--section">

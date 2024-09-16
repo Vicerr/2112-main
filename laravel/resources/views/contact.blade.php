@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :cart="$cart">
   <main class="container">
     <header class="full-width">
       <Span>Contact Us</Span>

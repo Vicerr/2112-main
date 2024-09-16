@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :cart="$cart">
   @push('title')| {{ $product->name }} @endpush
   <main class="container">
     <section class="item--container">
