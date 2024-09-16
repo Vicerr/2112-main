@@ -1,5 +1,3 @@
-@props(['cart'])
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -53,16 +51,18 @@
             @endif
           </ul>
           <div class="actions">
-            <a href="{{ route('cart') }}" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt=""></a>
-            <a href="{{ route('dashboard') }}" class="icon" @if ($cart) data-counter="{{ $cart }}" @endif ><img src="{{ asset('images/icons/envelope.svg') }}" alt=""></a href="">
+            {{-- <a href="{{ route('cart') }}" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt="Saved Items"></a> --}}
+            @if (auth()->check())
+                {{-- <x-cart-icon :cart="$cart"></x-cart-icon> --}}
+            @else
+              <a href="{{ route('login') }}" class="icon"><img src="{{ asset('images/icons/envelope.svg') }}" alt="Cart"></a>
+            @endif
           </div>
         </div>
         <button id="open-navigation" onclick="toggleNav()">
           <div class="bar"></div>
         </button>
-
       </div>
-
     </div>
   </nav>
   <x-flash-message />
