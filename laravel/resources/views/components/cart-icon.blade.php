@@ -1,5 +1,5 @@
 @props(['cart'])
 
 <div>
-    <a href="{{ route('dashboard') }}" class="icon" @if ($cart) data-counter="{{ $cart }}" @endif ><img src="{{ asset('images/icons/envelope.svg') }}" alt=""></a href="">
+    <a href="{{ route('cart') }}" class="icon" @if ($cart) data-counter="{{ $cart }}" @endif ><img src="{{ asset('images/icons/envelope.svg') }}" alt=""></a href="">
 </div>
