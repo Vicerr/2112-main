@@ -5,12 +5,31 @@
       <div class="item--product-details">
         <div class="item--image-container">
           <!-- product images -->
-          <img src="{{ asset($product->images[0]->path) }}" alt="">
-          <img src="{{ asset($product->images[1]->path) }}" alt="">
-          <img src="{{ asset($product->images[2]->path) }}" alt="">
-          <img src="{{ asset($product->images[3]->path) }}" alt="">
-
-          <img class="wide" src="{{ asset($product->images[4]->path) }}" alt="">
+          @if (!empty($product->images[0]->path))
+            <img class="wide" src="{{  asset($product->images[0]->path) }}" alt="">
+          @else
+            <img src="{{ asset('images/logo.png') }}" alt="">
+          @endif
+          @if (!empty($product->images[1]->path))
+            <img src="{{  asset($product->images[1]->path) }}" alt="">
+          @else
+            <img src="{{ asset('images/logo.png') }}" alt="">
+          @endif
+          @if (!empty($product->images[2]->path))
+            <img src="{{  asset($product->images[2]->path) }}" alt="">
+          @else
+            <img src="{{ asset('images/logo.png') }}" alt="">
+          @endif
+          @if (!empty($product->images[3]->path))
+            <img src="{{  asset($product->images[3]->path) }}" alt="">
+          @else
+            <img src="{{ asset('images/logo.png') }}" alt="">
+          @endif
+          @if (!empty($product->images[4]->path))
+            <img src="{{  asset($product->images[4]->path) }}" alt="">
+          @else
+            <img src="{{ asset('images/logo.png') }}" alt="">
+          @endif
         </div>
         <div class="item--misc">
           <div class="item--details">
