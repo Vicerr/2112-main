@@ -51,7 +51,7 @@ class ProductController extends Controller
             // Create a new image record in the images table
             Images::create([
                 'product_id' => $product_id,
-                'path' => 'public/products/' . $product_id . '/' . $imageName,
+                'path' => 'storage/products/' . $product_id . '/' . $imageName,
             ]);
         }
 
@@ -210,7 +210,7 @@ class ProductController extends Controller
         $images_to_delete = $product->images;
         // Delete all stored product images
         foreach ($images_to_delete as $image) {
-            $path = 'app/'.$image->path;
+            $path = 'app/'.str_replace('storage','public',$image->path);
             $path = storage_path($path);
             if (File::exists($path)) {
                 File::delete($path);
@@ -230,7 +230,7 @@ class ProductController extends Controller
             // Create a new image record in the images table
             Images::create([
                 'product_id' => $product_id,
-                'path' => 'public/products/' . $product_id . '/' . $imageName,
+                'path' => 'storage/products/' . $product_id . '/' . $imageName,
             ]);
         }
         
