@@ -26,7 +26,7 @@ Route::post('/auth/login', [UserController::class, 'authenticate'])->name('authe
 //Log user out
 Route::post('/logout', [UserController::class,'logout'])->name('logout');
 
-Route::view('/cart', 'cart')->name('cart');
+Route::get('/cart', [OrderController::class, 'show_cart'])->name('cart');
 
 Route::view('/checkout', 'checkout')->name('checkout');
 
