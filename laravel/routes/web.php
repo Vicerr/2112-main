@@ -26,8 +26,6 @@ Route::post('/auth/login', [UserController::class, 'authenticate'])->name('authe
 //Log user out
 Route::post('/logout', [UserController::class,'logout'])->name('logout');
 
-Route::get('/cart', [OrderController::class, 'show_cart'])->name('cart');
-
 Route::view('/checkout', 'checkout')->name('checkout');
 
 Route::get('/dashboard', [AdminController::class,'dashboard'])->name('dashboard');
@@ -57,11 +55,25 @@ Route::prefix('product')->name('product.')->group(function () {
 });
 
 Route::prefix('product')->name('order.')->group(function () {
-
+    
     Route::get('/{order}', [OrderController::class, 'order'])->name('order');
-
+    
     Route::put('/deliver/{order}', [OrderController::class, 'deliver'])->name('deliver');
-
+    
     Route::delete('/cancel/{order}', [OrderController::class, 'cancel'])->name('cancel');
+    
+});
 
+Route::get('/cart', [OrderController::class, 'show_cart'])->name('cart');
+
+Route::prefix('cart')->name('cart.')->group(function () {
+    
+    Route::post('/add', [OrderController::class, 'add'])->name('add');
+    
+    Route::delete('/clear', [OrderController::class, 'clear_cart'])->name('clear');
+    
+    Route::put('/edit/{cart}', [OrderController::class, 'update_cart'])->name('update');
+    
+    Route::delete('/delete/{cart}', [OrderController::class, 'delete_cart'])->name('delete');
+    
 });
