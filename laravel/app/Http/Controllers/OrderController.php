@@ -112,7 +112,7 @@ class OrderController extends Controller
             $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
             if (!$order) {
                 $cart_count = '';
-                return back()->with('message', "You don't have any item in your cart");
+                return redirect()->route('home')->with('message', "You don't have any item in your cart");
             } else {
                 $cart_count = count(json_decode($order->array_of_order_items));
                 $total_price = 0;
@@ -234,21 +234,21 @@ class OrderController extends Controller
                     return abort(404, 'Invalid order ID');
                 }
                 $order_item = Order_items::find($order_items_id);
-
                 if (!$order_item) {
                     // Order item doesn't exist, redirect back with a flash message
                     return back()->with('error', 'Order not found.');
                 }
-
+                
                 if (in_array($order_item->id, json_decode($order->array_of_order_items))) {
                     $new_array_of_order_items = json_decode($order->array_of_order_items);
-                    unset($new_array_of_order_items[$new_array_of_order_items[array_search($order_item->id, $new_array_of_order_items)]]);
-                    $order->update([
-                        'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
-                    ]);
+                    if (count($new_array_of_order_items) > 1) {
+                        unset($new_array_of_order_items[array_search($order_item->id, $new_array_of_order_items)]);
+                        $order->update([
+                            'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
+                        ]);
+                        $order_item->delete();
 
-                    $total_price = 0;
-                    if (count($new_array_of_order_items) > 0) {
+                        $total_price = 0;
                         foreach ($new_array_of_order_items as $order_items) {
                             // Retrieve order items based on the IDs
                             $order_item = Order_items::where('id', $order_items)->first();
@@ -257,13 +257,15 @@ class OrderController extends Controller
                             $product_item = Products::where('id', $product_id)->with('images')->first();
                             $total_price += $product_item->price * $order_item->quantity;
                         }
+                        
+                        $order->update([
+                            'total_price' => $total_price
+                        ]);
+                        return redirect()->route('cart')->with('message', 'Item deleted successfully');
                     }
                     $order_item->delete();
-
-                    $order->update([
-                        'total_price' => $total_price
-                    ]);
-                    return redirect()->route('cart')->with('message', 'Item deleted successfully');
+                    $order->delete();
+                    return redirect()->route('home')->with('message', 'Item deleted successfully');
                     
                 } else {
                     return back()->with('error', 'The order you are trying to access is not in your cart.');
