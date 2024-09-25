@@ -242,7 +242,7 @@ class OrderController extends Controller
 
                 if (in_array($order_item->id, json_decode($order->array_of_order_items))) {
                     $new_array_of_order_items = json_decode($order->array_of_order_items);
-                    unset($new_array_of_order_items[array_search($order_item->id, $new_array_of_order_items)]);
+                    unset($new_array_of_order_items[$new_array_of_order_items[array_search($order_item->id, $new_array_of_order_items)]]);
                     $order->update([
                         'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
                     ]);
