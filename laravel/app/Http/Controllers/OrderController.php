@@ -109,7 +109,7 @@ class OrderController extends Controller
     public function show_cart() {
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 $cart_count = '';
                 return redirect()->route('home')->with('message', "You don't have any item in your cart");
@@ -151,7 +151,7 @@ class OrderController extends Controller
     {
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 return back()->with('message', "You don't have any item in your cart");
             } else {
@@ -200,7 +200,7 @@ class OrderController extends Controller
     public function clear_cart(Request $request) {
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 return back()->with('message', "You don't have any item in your cart");
             } else {
@@ -223,7 +223,7 @@ class OrderController extends Controller
     public function delete_cart(Request $request) {
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 return back()->with('message', "You don't have any item in your cart");
             } else {
@@ -285,7 +285,7 @@ class OrderController extends Controller
 
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             $total_price = 0;
             if (!$order) {
                 $product = Products::where('id', $formFields['product_id'])->first();
@@ -297,7 +297,7 @@ class OrderController extends Controller
                 
                 $total_price = $product->price * $formFields['quantity'];
                 Orders::create([
-                    'status' => 'pending',
+                    'status' => 'queued',
                     'total_price' => $total_price,
                     'user_id' => $user_id,
                     'array_of_order_items' => json_encode(array($order_items_id))
@@ -338,5 +338,13 @@ class OrderController extends Controller
         } else {
             return back()->with('error', 'Sign in to access your cart');
         }       
+    }
+
+    public function billing(Request $request) {
+        return view('checkout', ['cart' => $cart_count]);
+    }
+    
+    public function checkout(Request $request) {
+        
     }
 }

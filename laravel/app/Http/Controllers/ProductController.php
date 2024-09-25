@@ -71,7 +71,7 @@ class ProductController extends Controller
         
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 $cart_count = '';
             } else {
@@ -165,7 +165,7 @@ class ProductController extends Controller
         }
         if (auth()->check()) {
             $user_id = auth()->user()->id;
-            $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
             if (!$order) {
                 $cart_count = '';
             } else {

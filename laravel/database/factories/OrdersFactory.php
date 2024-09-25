@@ -20,7 +20,7 @@ class OrdersFactory extends Factory
             'user_id' => $this->faker->numberBetween(1, 10),
             'array_of_order_items' => json_encode(array(1,2,3,4,5)),
             'total_price' => $this->faker->randomElement(['12000', '29000', '92000', '54000', '3500']),
-            'status' => $this->faker->randomElement(['delivered', 'cancelled', 'pending']),
+            'status' => $this->faker->randomElement(['delivered', 'cancelled', 'pending', 'queued']),
         ];
     }
 }
