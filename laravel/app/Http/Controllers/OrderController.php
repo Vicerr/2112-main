@@ -246,7 +246,7 @@ class OrderController extends Controller
                     $order->update([
                         'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
                     ]);
-                    
+
                     $total_price = 0;
                     if (count($new_array_of_order_items) > 0) {
                         foreach ($new_array_of_order_items as $order_items) {
@@ -308,7 +308,7 @@ class OrderController extends Controller
                     $order_item = Order_items::where('id', $order_items_id)->first();
                     // Access order item properties
                     $product_id = $order_item->product_id;
-                    if ($product_id === $formFields['product_id']) {
+                    if ($product_id == $formFields['product_id']) {
                         return back()->with('error', "Item already added to cart");
                     }
                     $product_item = Products::where('id', $product_id)->first();
