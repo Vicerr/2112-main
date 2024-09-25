@@ -39,7 +39,7 @@ class UserController extends Controller
         
         auth()->login($user);
         event(new Registered($user));
-        // return redirect()->route('verification.notice')->with('message', 'Account created and logged in');
+        return redirect()->route('verification.notice');
     }
     
     // Show Login Form
