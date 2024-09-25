@@ -11,6 +11,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{asset('css/main.css')}}">
   <link rel="stylesheet" href="{{asset('css/swiper-bundle.min.css')}}">
+  <link rel="icon" href="{{ asset('images/kaiadmin/favicon.ico') }}" type="image/x-icon" />
   @stack('style')
   <script defer type="module" src="{{asset('js/swiper-config.js')}}"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
