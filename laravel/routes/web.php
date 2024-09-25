@@ -97,3 +97,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::delete('/delete/{cart}', [OrderController::class, 'delete_cart'])->name('delete');
     
 });
+
+Route::get('/billing', [OrderController::class, 'billing'])->name('billing');
+
+Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
