@@ -246,16 +246,18 @@ class OrderController extends Controller
                     $order->update([
                         'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
                     ]);
-                    
                     $total_price = 0;
-                    foreach ($new_array_of_order_items as $order_items) {
-                        // Retrieve order items based on the IDs
-                        $order_item = Order_items::where('id', $order_items)->first();
-                        // Access order item properties
-                        $product_id = $order_item->product_id;
-                        $product_item = Products::where('id', $product_id)->with('images')->first();
-                        $total_price += $product_item->price * $order_item->quantity;
+                    if (count($new_array_of_order_items) > 0) {
+                        foreach ($new_array_of_order_items as $order_items) {
+                            // Retrieve order items based on the IDs
+                            $order_item = Order_items::where('id', $order_items)->first();
+                            // Access order item properties
+                            $product_id = $order_item->product_id;
+                            $product_item = Products::where('id', $product_id)->with('images')->first();
+                            $total_price += $product_item->price * $order_item->quantity;
+                        }
                     }
+                    $order_item->delete();
 
                     $order->update([
                         'total_price' => $total_price
@@ -281,6 +283,7 @@ class OrderController extends Controller
         if (auth()->check()) {
             $user_id = auth()->user()->id;
             $order = Orders::where('user_id', $user_id)->where('status', 'pending')->first();
+            $total_price = 0;
             if (!$order) {
                 $product = Products::where('id', $formFields['product_id'])->first();
                 $order_items_id = Order_items::create([
@@ -293,34 +296,42 @@ class OrderController extends Controller
                 Orders::create([
                     'status' => 'pending',
                     'total_price' => $total_price,
+                    'user_id' => $user_id,
                     'array_of_order_items' => json_encode(array($order_items_id))
                 ]);
                 // $cart_count = '';
-                // return back()->with('message', "You don't have any item in your cart");
+                return back()->with('message', "Item successfully added to cart");
             } else {
-            //     $cart_count = count(json_decode($order->array_of_order_items));
-            //     $total_price = 0;
-            //     $customArray = [];
-            //     foreach (json_decode($order->array_of_order_items) as $order_items) {
-            //         // Retrieve order items based on the IDs
-            //         $order_item = Order_items::where('id', $order_items)->first();
-            //         // Access order item properties
-            //         $product_id = $order_item->product_id;
-            //         $product_item = Products::where('id', $product_id)->with('images')->first();
-            //         $total_price += $product_item->price * $order_item->quantity;
-            //         $customArray[] = [
-            //             'order_item_id' => $order_items,
-            //             'product_id' => $order_item->product_id,
-            //             'product_name' => $product_item->name,
-            //             'product_price' => $product_item->price,
-            //             'product_color' => $product_item->color,
-            //             'size' => $order_item->size,
-            //             'quantity' => $order_item->quantity,
-            //             'image' => $product_item->images->first()->path,
-            //         ];
-            //     }
-            //     return view('cart', ['cart' => $cart_count, 'cart', 'items' => $customArray, 'total_price' => $total_price,]);
-            // }
+                // check if product is already order cart
+                foreach (json_decode($order->array_of_order_items) as $order_items_id) {
+                    $order_item = Order_items::where('id', $order_items_id)->first();
+                    // Access order item properties
+                    $product_id = $order_item->product_id;
+                    if ($product_id === $formFields['product_id']) {
+                        return back()->with('error', "Item already added to cart");
+                    }
+                    $product_item = Products::where('id', $product_id)->first();
+                    $total_price += $product_item->price * $order_item->quantity;
+                }
+                // Add new order item id to array
+                $new_array_of_order_items = json_decode($order->array_of_order_items);
+                $order_items_id = Order_items::create([
+                    'product_id' => $formFields['product_id'],
+                    'quantity' => $formFields['quantity'],
+                    'size' => $formFields['size']                   
+                ])->id;
+                    
+                array_push($new_array_of_order_items, $order_items_id);
+                $product_item = Products::where('id', $formFields['product_id'])->first();
+                $total_price += $product_item->price * $formFields['quantity'];
+
+                $order->update([
+                    'array_of_order_items' => json_encode(array_values($new_array_of_order_items)),
+                    'total_price' => $total_price
+                ]);
+
+                return back()->with('message', 'Item successfully added to cart');
+            }
         } else {
             return back()->with('error', 'Sign in to access your cart');
         }       
