@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Auth\Events\Registered;
+ 
 class UserController extends Controller
 {   
     // Show registration form
@@ -34,10 +35,11 @@ class UserController extends Controller
              'email' => $formFields['email'],
              'password' => $formFields['password'],
              'role' => 'user'
-            ]);
+        ]);
         
         auth()->login($user);
-        return redirect('/')->with('message', 'Account created and logged in');
+        event(new Registered($user));
+        // return redirect()->route('verification.notice')->with('message', 'Account created and logged in');
     }
     
     // Show Login Form
