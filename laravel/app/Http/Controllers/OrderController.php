@@ -246,6 +246,7 @@ class OrderController extends Controller
                     $order->update([
                         'array_of_order_items' => json_encode(array_values($new_array_of_order_items))
                     ]);
+                    
                     $total_price = 0;
                     if (count($new_array_of_order_items) > 0) {
                         foreach ($new_array_of_order_items as $order_items) {
