@@ -50,6 +50,9 @@
                 <button class="select-btn">L</button>
                 <button aria-current="true" class="select-btn">XL</button>
               </div>
+              @error('size')
+                <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+              @enderror
             </div>
             <!-- product price  -->
             <p class="item--price">
@@ -77,16 +80,19 @@
                       </div>
                     </div>
             </div>
+            @error('quantity')
+              <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+            @enderror
           </div>
           
-          <form action="/cart/add" method="post" class="item--actions" id="productOrderForm">
+          <form action="{{ route('cart.add') }}" method="POST" class="item--actions" id="productOrderForm">
             @csrf
-            <input type="hidden" name="size" value="M" id="select">
+            <input type="hidden" name="size" value="M" id="selectedSize">
             <input type="text" hidden value="1" name="quantity" style="display: none;" id="order-number">
             <input type="text" hidden value="{{ $product->id }}" name="product_id">
             <button type="submit">Add to Cart </button>
-          {{-- </form>
-          <form action="/billing" method="post" class="item--actions" id="productOrderForm">
+          </form>
+      {{-- <form action="/billing" method="post" class="item--actions" id="productOrderForm">
             <input type="hidden" name="size" value="M" id="select">
             <input type="text" hidden value="1" name="quantity" style="display: none;" id="order-number">
             <input type="text" hidden value="{{ $product->id }}" name="product_id">
@@ -110,25 +116,30 @@
         <button onclick="closeModal()">Close</button>
       </dialog> -->
     </section>
-
-    <section class="product--section product-page">
-      <h2 class="product--page-header">
-        Related Products
-      </h2>
-      <div class="product--container">
-        @foreach ($related_product as $related)
-          <a href="/product/{{ $related->id }}" class="product--item">
-            <div class="product--image-container">
-              <img src="{{ asset($related->images->first()->path) }}" loading="lazy" alt="">
-            </div>
-            <div class="product--item--description">
-              <p class="product--item--name">{{ $related->name }}</p>
-              <p class="product--item--price">&#x20a6 {{ number_format($related->price) }}</p>
-            </div>
-          </a>
-        @endforeach
-      </div>
-    </section>
+    @if (count($related_product) > 0)
+      <section class="product--section product-page">
+        <h2 class="product--page-header">
+          Related Products
+        </h2>
+        <div class="product--container">
+          @foreach ($related_product as $related)
+            <a href="/product/{{ $related->id }}" class="product--item">
+              <div class="product--image-container">
+                @if (!empty($related->images->first()->path))
+                  <img src="{{  asset($related->images->first()->path) }}" loading="lazy" alt="">
+                @else
+                <img src="{{ asset('images/logo.png') }}" alt="">
+                @endif
+              </div>
+              <div class="product--item--description">
+                <p class="product--item--name">{{ $related->name }}</p>
+                <p class="product--item--price">&#x20a6 {{ number_format($related->price) }}</p>
+              </div>
+            </a>
+          @endforeach
+        </div>
+      </section>
+    @endif
   </main>
   @push('script')
   <script>
