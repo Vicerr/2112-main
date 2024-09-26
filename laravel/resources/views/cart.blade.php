@@ -123,7 +123,7 @@
           <p><span>Total Price:</span><span><span>&#8358</span><span>{{ number_format($total_price) }}</span></span></p>
           {{-- <p class="text-secondary"><span>Savings Applied</span> <span>£3300</span></p> --}}
           <!-- <form action="/checkout" method="post"> -->
-          <button style="padding: 0;" type="submit"><a style="display: block; text-decoration: none; color: white; padding-block: 1em;" href="/checkout" class="cart-btn">Checkout</a></button>
+          <button style="padding: 0;" type="submit"><a style="display: block; text-decoration: none; color: white; padding-block: 1em;" href="{{ route('billing') }}" class="cart-btn">Checkout</a></button>
           <!-- </form> -->
           <form action="{{ route('cart.clear') }}" method="POST" id="clear-orders-form">
             @csrf
