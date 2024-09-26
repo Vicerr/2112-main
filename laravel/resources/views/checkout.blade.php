@@ -2,17 +2,21 @@
   <main class="container checkout">
     <div class="wrapper">
       <!-- submit clients address details if he chooses to order by delivery -->
-      <form action="" class="billing-address" id="order-form">
+      <form action="{{ route('checkout') }}" method="POST" class="billing-address" id="order-form">
         @csrf
+        @method('POST')
         <div class="form-group">
-          <label for="information">Customer Information</label>
-          <input type="text" name="email" id="">
+          <input type="text" name="deliveryType" value="door_delivery" id="deliveryTypeInput" hidden>
         </div>
         <div class="form-group">
-          <input type="text" name="deliveryType" id="deliveryTypeInput" hidden>
+          <label for="information">Phone Number</label>
+          <input type="tel" name="phone" placeholder="Pattern: +2340123456789" required ="">
         </div>
+        @error('phone')
+          <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+        @enderror
         <div class="delivery-method">
-          <div class="delivery-type active" data-delivery-type="deliver">
+          <div class="delivery-type active" data-delivery-type="door_delivery">
             <img class="delivery-tick" src="{{ asset('images/icons/tick.svg') }}" alt="">
             <p class="delivery-heading">Home Delivery</p>
             <p class="delivery-details">Delivery within 2 - 5 business days</p>
@@ -24,44 +28,46 @@
           </div>
         </div>
       </form>
+      @error('address')
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+      @enderror
+      @error('city')
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+      @enderror
+      @error('landmark')
+        <small style="color:red; display:block; font-style:italic; justify-self: start; margin: 10px 0px 0px 10px;">{{$message}}</small>
+      @enderror
       <div class="order--section">
-        <div class="order--summary-container">
-
+        <div class="order--summary-container" style="overflow-y: auto">
+          @foreach ($items as $item)
           <div class="order--item">
             <div class="order--item-image-container">
-              <img src="{{ asset('images/img-8337-6680861cdabff.webp') }}" alt="">
+              @if (!empty($item['image']))
+                <img src=" {{ asset($item['image']) }}" alt="">
+              @else
+                <img src=" {{ asset(images/logo.png) }}" alt="">
+              @endif
             </div>
             <div class="order--item-details">
-              <p class="order--item-name">Styled Senator</p>
-              <p class="order--item-quantity">2</p>
-              <p class="order--item-size">m</p>
+              <p class="order--item-name">{{ ucfirst($item['product_name']) }}</p>
+              <p class="order--item-quantity">Quantity: <span class="display-order-count"></span>{{ $item['quantity'] }}</span></p>
+              <p class="order--item-size">Size: <span>{{ $item['size'] }}</span></p>
             </div>
-            <p class="order--item-price">$50</p>
+            <p class="order--item-price">Price: &#8358 {{ number_format($item['product_price']) }}</p>
           </div>
-          <div class="order--item">
-            <div class="order--item-image-container">
-              <img src="{{ asset('images/img-8336-6680861d35809.webp') }}" alt="">
-            </div>
-            <div class="order--item-details">
-              <p class="order--item-name">Brown Butterfly Senator</p>
-              <p class="order--item-quantity">1</p>
-              <p class="order--item-size">l</p>
-            </div>
-            <p class="order--item-price">$50</p>
-          </div>
-        </div>
+          @endforeach
         <div class="order--cart-summary">
           <div class="details">
             <div>
               <p><b>Total</b></p>
-              <p>$20</p>
+              <p>&#8358 {{ number_format($total_price) }}</p>
             </div>
-
+            
           </div>
         </div>
         <button onclick="submitBillingDetailsForm()">Complete Order</button>
       </div>
-
+      
     </div>
   </main>
 </x-layout>
