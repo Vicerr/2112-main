@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Billing;
 use App\Models\User;
 use App\Models\Orders;
 use App\Models\Products;
@@ -341,10 +342,81 @@ class OrderController extends Controller
     }
 
     public function billing(Request $request) {
-        return view('checkout', ['cart' => $cart_count]);
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            if (!$order) {
+                $cart_count = '';
+                return redirect()->route('home')->with('message', "You don't have any item in your cart");
+            } else {
+                $cart_count = count(json_decode($order->array_of_order_items));
+                $total_price = 0;
+                $customArray = [];
+                foreach (json_decode($order->array_of_order_items) as $order_items) {
+                    // Retrieve order items based on the IDs
+                    $order_item = Order_items::where('id', $order_items)->first();
+                    // Access order item properties
+                    $product_id = $order_item->product_id;
+                    $product_item = Products::where('id', $product_id)->with('images')->first();
+                    $total_price += $product_item->price * $order_item->quantity;
+                    $customArray[] = [
+                        'order_item_id' => $order_items,
+                        'product_id' => $order_item->product_id,
+                        'product_name' => $product_item->name,
+                        'product_price' => $product_item->price,
+                        'product_color' => $product_item->color,
+                        'size' => $order_item->size,
+                        'quantity' => $order_item->quantity,
+                        'image' => $product_item->images->first()->path,
+                    ];
+                }
+                return view('checkout', ['cart' => $cart_count, 'cart', 'items' => $customArray, 'total_price' => $total_price,]);
+            }
+        } else {
+            $cart_count = '';
+            return back()->with('error', 'Sign in to access your cart');
+        }
     }
     
     public function checkout(Request $request) {
-        
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            if ($request->has(['address', 'city', 'landmark'])) {
+                $formFields = $request->validate([
+                    'phone' => ['required', 'string', 'max:255',],
+                    'address' => ['string', 'max:225',],
+                    'city' => ['string', 'max:225',],
+                    'landmark' =>  ['string', 'max:255',],    
+                    'deliveryType' => ['required', 'string', 'max:255', 'in:door_delivery,pickup',],
+                ]); 
+                // Create a new product
+                Billing::create([
+                    'user_id' => $user_id,
+                    'phone_number' => $formFields['phone'],
+                    'address' => $formFields['address'],
+                    'city' => $formFields['city'],
+                    'closest_landmark' => $formFields['landmark'],
+                    'delivery_type' => $formFields['deliveryType'],
+                ]);
+            } else {
+                $formFields = $request->validate([
+                    'phone' => ['required', 'string', 'max:255',],
+                    'deliveryType' => ['required', 'string', 'max:255', 'in:door_delivery,pickup',],
+                ]);
+                Billing::create([
+                    'user_id' => $user_id,
+                    'phone_number' => $formFields['phone'],
+                    'delivery_type' => $formFields['deliveryType'],
+                ]);
+            }
+
+            $order->update([
+                'status' => 'pending'
+            ]);
+            return redirect()->route('home')->with('message', 'Order placed successfully');
+        } else {
+            return back()->with('error', 'Sign in to access your cart');
+        }           
     }
 }
