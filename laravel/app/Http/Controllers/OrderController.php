@@ -370,7 +370,8 @@ class OrderController extends Controller
                         'image' => $product_item->images->first()->path,
                     ];
                 }
-                return view('checkout', ['cart' => $cart_count, 'cart', 'items' => $customArray, 'total_price' => $total_price,]);
+                
+                return view('checkout', ['cart' => $cart_count, 'items' => $customArray, 'total_price' => $total_price,]);
             }
         } else {
             $cart_count = '';
@@ -419,4 +420,61 @@ class OrderController extends Controller
             return back()->with('error', 'Sign in to access your cart');
         }           
     }
+
+    public function status(Request $request) {
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order_details = Orders::orderBy('created_at','desc')->where('user_id', $user_id)->where('status', '!=', 'queued')->get();
+            $cart_count_order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            if (!$cart_count_order && !$order_details) {
+                $cart_count = '';
+                return redirect()->route('home')->with('message', "You don't have any item in your cart");
+            }
+            
+            if (!$order_details && $cart_count_order) {
+                return redirect()->route('home')->with('message', "You have not made an order.");
+            }
+            
+            if ($order_details) {
+                if (!$cart_count_order) {
+                    $cart_count = '';
+                } else {
+                    $cart_count = count(json_decode($cart_count_order->array_of_order_items));
+                }
+                $order_details_array = [];
+                $order_item_details = [];
+                $count = 1;
+                foreach ($order_details as $order) {
+                    foreach (json_decode($order->array_of_order_items) as $order_items) {
+                        // Retrieve order items based on the IDs
+                        $order_item = Order_items::where('id', $order_items)->first();
+                        // Access order item properties
+                        $product_id = $order_item->product_id;
+                        $product_item = Products::where('id', $product_id)->first();
+                        $order_item_details[] = [
+                            'product_count' => $count,
+                            'product_name' => $product_item->name,
+                            'quantity' => $order_item->quantity,
+                            'size' => $order_item->size,
+                            'product_color' => $product_item->color,
+                            'product_price' => $product_item->price,
+                        ];
+                        $count += 1;
+                    }
+                    $order_details_array[] = [
+                        'order_id' => $order->id,
+                        'total_price' => $order->total_price,
+                        'status' => $order->status,
+                        'order_item_details' => $order_item_details,
+                    ];
+                }
+                
+                return view('orders', ['cart' => $cart_count, 'order_details' => $order_details_array]);
+            }
+        } else {
+            $cart_count = '';
+            return back()->with('error', 'Sign in to access your cart');
+        }
+
+    }   
 }
