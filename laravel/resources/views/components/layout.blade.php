@@ -32,7 +32,7 @@
           <ul class="nav-items pointer">
             <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
             <li><a class="nav-link" href="{{ route('products') }}">Collections</a></li>
-            <li><a class="nav-link hide" href="{{ route('checkout') }}">Orders</a></li>
+            <li><a class="nav-link hide" href="{{ route('order.status') }}">Orders</a></li>
             <li><a class="nav-link hide" href="{{ route('cart') }}">Cart</a></li>
             <li><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
             @if (auth()->check())
@@ -55,7 +55,8 @@
           <div class="actions">
             {{-- <a href="{{ route('cart') }}" class="icon"><img src="{{ asset('images/icons/save.svg') }}" alt="Saved Items"></a> --}}
             @if (auth()->check())
-                <x-cart-icon :cart="$cart" />
+                <x-cart-icon :cart="$cart[0]" />
+                <x-order-icon :cart="$cart[1]" />
             @else
               <a href="{{ route('login') }}" class="icon"><img src="{{ asset('images/icons/envelope.svg') }}" alt="Cart"></a>
             @endif

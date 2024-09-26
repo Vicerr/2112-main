@@ -1,4 +1,5 @@
 <x-layout :cart="$cart">
+  @push('title')| Checkout @endpush
   <main class="container checkout">
     <div class="wrapper">
       <!-- submit clients address details if he chooses to order by delivery -->

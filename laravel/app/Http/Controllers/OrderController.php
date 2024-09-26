@@ -111,11 +111,20 @@ class OrderController extends Controller
         if (auth()->check()) {
             $user_id = auth()->user()->id;
             $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            $pending_order = Orders::where('user_id', $user_id)->where('status', 'pending')->count();
             if (!$order) {
                 $cart_count = '';
                 return redirect()->route('home')->with('message', "You don't have any item in your cart");
             } else {
-                $cart_count = count(json_decode($order->array_of_order_items));
+                if (!$order && !$pending_order) {
+                    $cart_count = '';
+                } elseif ($order && !$pending_order) {
+                    $cart_count = [count(json_decode($order->array_of_order_items)), ''];
+                } elseif (!$order && $pending_order) {
+                    $cart_count = ['', $pending_order];
+                } else {
+                    $cart_count = [count(json_decode($order->array_of_order_items)), $pending_order];
+                }
                 $total_price = 0;
                 $customArray = [];
                 foreach (json_decode($order->array_of_order_items) as $order_items) {
@@ -345,11 +354,20 @@ class OrderController extends Controller
         if (auth()->check()) {
             $user_id = auth()->user()->id;
             $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            $pending_order = Orders::where('user_id', $user_id)->where('status', 'pending')->count();
             if (!$order) {
                 $cart_count = '';
                 return redirect()->route('home')->with('message', "You don't have any item in your cart");
             } else {
-                $cart_count = count(json_decode($order->array_of_order_items));
+                if (!$order && !$pending_order) {
+                    $cart_count = '';
+                } elseif ($order && !$pending_order) {
+                    $cart_count = [count(json_decode($order->array_of_order_items)), ''];
+                } elseif (!$order && $pending_order) {
+                    $cart_count = ['', $pending_order];
+                } else {
+                    $cart_count = [count(json_decode($order->array_of_order_items)), $pending_order];
+                }
                 $total_price = 0;
                 $customArray = [];
                 foreach (json_decode($order->array_of_order_items) as $order_items) {
@@ -426,8 +444,11 @@ class OrderController extends Controller
             $user_id = auth()->user()->id;
             $order_details = Orders::orderBy('created_at','desc')->where('user_id', $user_id)->where('status', '!=', 'queued')->get();
             $cart_count_order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            $pending_order = Orders::where('user_id', $user_id)->where('status', 'pending')->count();
             if (!$cart_count_order && !$order_details) {
-                $cart_count = '';
+                if (!$pending_order) {
+                    $cart_count = '';
+                }
                 return redirect()->route('home')->with('message', "You don't have any item in your cart");
             }
             
@@ -436,10 +457,12 @@ class OrderController extends Controller
             }
             
             if ($order_details) {
-                if (!$cart_count_order) {
-                    $cart_count = '';
+                if (!$cart_count_order && $pending_order) {
+                    $cart_count = ['', $pending_order];
+                } elseif ($cart_count_order && !$pending_order) {
+                    $cart_count = [count(json_decode($order->array_of_order_items)), ''];
                 } else {
-                    $cart_count = count(json_decode($cart_count_order->array_of_order_items));
+                    $cart_count = [count(json_decode($order->array_of_order_items)), $pending_order];
                 }
                 $order_details_array = [];
                 $order_item_details = [];

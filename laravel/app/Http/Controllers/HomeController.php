@@ -11,10 +11,15 @@ class HomeController extends Controller
         if (auth()->check()) {
             $user_id = auth()->user()->id;
             $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
-            if (!$order) {
+            $pending_order = Orders::where('user_id', $user_id)->where('status', 'pending')->count();
+            if (!$order && !$pending_order) {
                 $cart_count = '';
+            } elseif ($order && !$pending_order) {
+                $cart_count = [count(json_decode($order->array_of_order_items)), ''];
+            } elseif (!$order && $pending_order) {
+                $cart_count = ['', $pending_order];
             } else {
-                $cart_count = count(json_decode($order->array_of_order_items));
+                $cart_count = [count(json_decode($order->array_of_order_items)), $pending_order];
             }
         } else {
             $cart_count = '';
@@ -26,10 +31,15 @@ class HomeController extends Controller
         if (auth()->check()) {
             $user_id = auth()->user()->id;
             $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
-            if (!$order) {
+            $pending_order = Orders::where('user_id', $user_id)->where('status', 'pending')->count();
+            if (!$order && !$pending_order) {
                 $cart_count = '';
+            } elseif ($order && !$pending_order) {
+                $cart_count = [count(json_decode($order->array_of_order_items)), ''];
+            } elseif (!$order && $pending_order) {
+                $cart_count = ['', $pending_order];
             } else {
-                $cart_count = count(json_decode($order->array_of_order_items));
+                $cart_count = [count(json_decode($order->array_of_order_items)), $pending_order];
             }
         } else {
             $cart_count = '';
