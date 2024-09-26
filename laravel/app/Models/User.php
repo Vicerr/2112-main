@@ -51,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function billing() {
         return $this->hasMany(billing::class, 'user_id');
     }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
 }
