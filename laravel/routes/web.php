@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [HomeController::class,'index'])->name('home');
 
-Route::view('/contact', 'contact')->name('contact');
+Route::get('/contact', [HomeController::class,'contact'])->name('contact');
 
 //Show registration form
 Route::get('/register', [UserController::class,'create'])->name('register');

@@ -21,4 +21,19 @@ class HomeController extends Controller
         }
         return view("index", ['cart' => $cart_count]);
     }
+
+    public function contact() {
+        if (auth()->check()) {
+            $user_id = auth()->user()->id;
+            $order = Orders::where('user_id', $user_id)->where('status', 'queued')->first();
+            if (!$order) {
+                $cart_count = '';
+            } else {
+                $cart_count = count(json_decode($order->array_of_order_items));
+            }
+        } else {
+            $cart_count = '';
+        }
+        return view("contact", ['cart' => $cart_count]);
+    }
 }
