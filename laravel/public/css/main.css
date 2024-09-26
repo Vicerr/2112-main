@@ -825,7 +825,7 @@ body {
   flex: 2;
 }
 .order--item-size {
-  text-transform: uppercase;
+  text-transform: inherit;
 }
 .order--cart-summary .details > div {
   display: flex;
