@@ -74,7 +74,9 @@ Route::prefix('product')->name('product.')->group(function () {
     
 });
 
-Route::prefix('product')->name('order.')->group(function () {
+Route::prefix('order')->name('order.')->group(function () {
+    
+    Route::get('/status', [OrderController::class, 'status'])->name('status');
     
     Route::get('/{order}', [OrderController::class, 'order'])->name('order');
     
